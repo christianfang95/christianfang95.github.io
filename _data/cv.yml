@@ -2,96 +2,64 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Christian Fang
     - name: Date of Birth
-      value: 14th March 1879
+      value: July 29, 1995
     - name: Languages
-      value: English, German
+      value: English, German, Dutch, Mandarin
+    - name: Place of residence
+      value: Houten, The Netherlands
 
 - title: Education
   type: time_table
   contents:
     - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+      institution: Department of Sociologt, Utrecht University, The Netherlands
+      year: 2024 
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
+        - Dissertation title: Family life in postdivorce families
+        - Date of defense: March 1, 2024
+    - title: Master (research)
+      institution: Department of Human Geography and Planning, Utrecht University, The Netherlands
+      year: 2019
       description:
-        - Description 1.
-        - Description 2.
+        - Research masters' in Urban and Economic Geography
+        - Thesis published in "Housing Studies" (see publications)
+    - title: Bachelor
+      institution: Geographical Institute, Ruhr-University Bochum, Germany
+      year: 2017
+      description:
+      - Bachelors' degree in Geography
 
 - title: Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    - title: Statistical researcher
+      institution: Centraal Bureau voor de Statistiek, The Hague, The Netherlands
+      year: 2023 - today
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
-      description:
-        - Description 1.
-        - Description 2.
-
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
-  type: time_table
-  contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
+        - Researcher in the demography team
+ 
+    - title: PhD researcher
+      institution: Department of Sociology, Utrecht University, The Netherlands
+      year: 2019-2023
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: family sociology.
       items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - divorce.
+        - LGBTQIA+ families.
+        - leaving home.
+        - life course events in general.
+    - title: statistics.
       items:
-        - Description 1.
-        - Description 2.
+        - frequentist statistics
+        - simulation studies
+        - regression models
 
 - title: Other Interests
   type: list
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - <u>Hobbies:</u> CrossFit, reading, (road) biking, vegan cooking
