@@ -18,13 +18,6 @@ Researchers use $$p$$-values in the context of hypothesis testing to decide whet
 
 This is illustrated in this nifty pic. If we get a small $$p$$-value we are usually happy (no matter how close it is to 0.05), if we get a big $$p$$-value we cry (and wonder if our paper will ever get published). But what about $$p$$-values that are "hovering" just above 0.05?
 
-<div class="row mt-3">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include p-value.png path="assets/img/p-value.png" class="img-fluid rounded z-depth-1" %}
-    </div>
-
-</div>
-
 In many published papers you will find such a "third kind" of $$p$$-value, which is commonly called the "marginally significant" $$p$$-value. Alternative names include $$p$$-values that are "trending towards significance", "approaching significance", "hovering just above the significance level", or "almost significant". 
 
 Such "marginally significant" $$p$$-values, however, simply do not exist. In other words, labelling some $p$-values as "marginally significant" is a statistical mistake (which is why I use this term between " "). Let me tell you why.
