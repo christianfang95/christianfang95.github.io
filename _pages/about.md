@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle: Statistics Netherlands (Centraal Bureau voor de Statistiek; CBS), The Hague.
 
 profile:
   align: right
