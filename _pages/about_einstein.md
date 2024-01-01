@@ -1,6 +1,4 @@
-I am a statistical researcher in the demography team of [Statistics Netherlands (CBS)](http://cbs.nl). Before that, I was a full-time PhD researcher at the Department of Sociology, Utrecht University.
 
-On this website, you will find my publications, nerdy statistics blogs, and contact information.
 
 Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
 
