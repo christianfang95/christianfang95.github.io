@@ -2,7 +2,7 @@
 title: 'There are no "marginally significant" p-values'
 date: 2022-11-25
 permalink: /posts/2022/11/marginally-significant/
-excerpt: "Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they're wrong."
+excerpt: "Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they're wrong." 
 excerpt_separator: <!--more-->
 toc:
   beginning: true
