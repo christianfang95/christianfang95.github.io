@@ -4,7 +4,8 @@ date: 2022-11-25
 permalink: /posts/2022/11/marginally-significant/
 excerpt: "Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they're wrong."
 excerpt_separator: <!--more-->
-toc: true
+toc:
+  beginning: true
 tags:
   - statistics
   - R
@@ -13,11 +14,16 @@ tags:
 
 # Introduction
 
-Researchers use $p$-values in the context of hypothesis testing to decide whether to accept or reject the null hypothesis. The routine goes as follows: before running the analyis/the hypothesis test, we decide on a significance level (or "alpha level", typically 5% or 0.05) below which we decide to reject the null hypothesis. Next, we run the analysis/hypothesis test, and compute the $p$-value. If the $p$-value is below the significance level, we reject the null hypothesis: the $p$-value is "statistically significant". If the $p$-value is above the significance level, we "fail to reject" the null hypothesis: the $p$-value is not statistically significant.
+Researchers use `$$`p`$$`-values in the context of hypothesis testing to decide whether to accept or reject the null hypothesis. The routine goes as follows: before running the analyis/the hypothesis test, we decide on a significance level (or "alpha level", typically 5% or 0.05) below which we decide to reject the null hypothesis. Next, we run the analysis/hypothesis test, and compute the $p$-value. If the `$$`p`$$`-value is below the significance level, we reject the null hypothesis: the $p$-value is "statistically significant". If the `$$`p`$$`-value is above the significance level, we "fail to reject" the null hypothesis: the $p$-value is not statistically significant.
 
-This is illustrated in this nifty pic. If we get a small $p$-value we are usually happy (no matter how close it is to 0.05), if we get a big $p$-value we cry (and wonder if our paper will ever get published). But what about $p$-values that are "hovering" just above 0.05?
+This is illustrated in this nifty pic. If we get a small `$$`p`$$`-value we are usually happy (no matter how close it is to 0.05), if we get a big `$$`p`$$`-value we cry (and wonder if our paper will ever get published). But what about $p$-values that are "hovering" just above 0.05?
 
-![](/images/p-value.png)
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        {% include p-value.png path="assets/img/p-value.png" class="img-fluid rounded z-depth-1" %}
+    </div>
+
+</div>
 
 In many published papers you will find such a "third kind" of $p$-value, which is commonly called the "marginally significant" $p$-value. Alternative names include $p$-values that are "trending towards significance", "approaching significance", "hovering just above the significance level", or "almost significant". 
 
