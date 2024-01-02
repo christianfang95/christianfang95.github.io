@@ -3,7 +3,7 @@ layout: post
 title:  Learn how to run a basic simulation study in R
 date: 2023-03-18 00:00:00
 description: Simulation studies are extremely valuable tools to understand how statistical models behave. Learn how to run a simulation study comparing linear regression and t-tests in R!
-tags: {data science} statistics dataviz R
+tags: statistics dataviz R
 toc:
   sidebar: left
 ---
