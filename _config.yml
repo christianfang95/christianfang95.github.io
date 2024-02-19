@@ -120,7 +120,7 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 # -----------------------------------------------------------------------------
 
 blog_name: Christian's nerdy statistics blog # blog_name will be displayed in your blog page
-blog_description: A blog on all things I find interesting about (official) statistics, computational methods, and why you should stop using the linear probability model.
+blog_description: A blog on all things I find interesting about (official) statistics, computational methods, etc.
 permalink: /blog/:year/:title/
 
 # Pagination
