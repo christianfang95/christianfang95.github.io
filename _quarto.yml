@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Christian Fang"
+  description: "Personal website of Christian Fang"
+  site-url: https://christianfang95.github.io
+  repo-url: https://christianfang95.github.io
+  open-graph: true
+  navbar:
+    background: dark
+    foreground: light
+    left:
+      - href: index.qmd
+        text: Home
+      - href: research.qmd
+      - href: blog.qmd
+      - href: cv.qmd
+    tools:
+      - icon: github
+        href: https://github.com/christianfang95/
+      - icon: bank2
+        href: https://scholar.google.de/citations?user=FePrRkEAAAAJ
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 4
+    toc-title: "Contents"
+    html-math-method: katex
+    include-in-header:
+      - includes.html
+    highlight-style: tango
+
+execute:
+  freeze: auto

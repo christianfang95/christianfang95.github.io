@@ -1,0 +1,6 @@
+---
+title: "contact"
+format: html
+---
+
+Send me an e-mail: hello@christianfang.eu

@@ -1,0 +1,47 @@
+---
+title: "Curriculum Vitae"
+format:
+  html:
+    toc: true
+css: cv.css
+---
+
+## Employment
+
+### Statistical researcher
+
+Statistics Netherlands/Centraal Bureau voor de Statistiek (CBS) [Sept 2023 -- Present]{.cvdate}
+
+-   Producing (register-based) statistics on family formation and dissolution, with a special focus on unmarried cohabitation and same-sex families
+
+-   Collaborating with academic researchers on scientific publications
+
+-   Methodological and process innovations, e.g., transitioning from SPSS to R or benchmarking different statistical approaches and models
+
+### Ph.D. Candidate/doctoral researcher
+
+Department of Sociology, Utrecht University [Sept 2019 - Aug 2023]{.cvdate}
+
+-   Quantitative research on postdivorce families, cumulating in my doctoral dissertation (see below)
+
+-   Teaching statistics workgroups
+
+## Education
+
+### Doctor of Philosophy, Sociology
+
+Department of Sociology, Utrecht University, The Netherlands [awarded March 1st, 2024]{.cvdate}
+
+Dissertation:[Family life in postdivorce families](https://research-portal.uu.nl/ws/portalfiles/portal/213593647/171378-christian-fangmailversie%20-%2065c4fc6b96c21.pdf)
+
+Supervisors: prof. dr. Anne-Rigt Poortman, prof. dr. Tanja van der Lippe
+
+### M.Sc, Urban and Economic Geography
+
+Faculty of Geosciences, Utrecht University, The Netherlands [Sept 2017 - July 2019]{.cvdate}
+
+Thesis: [‘We prefer our Dutch’: International students’ housing experiences in the Netherlands](https://www.tandfonline.com/doi/pdf/10.1080/02673037.2020.1720618)
+
+### B.Sc., Geography
+
+Faculty of Geosciences, Ruhr University Bochum, Germany [Oct 2014 - July 2017]{.cvdate}
