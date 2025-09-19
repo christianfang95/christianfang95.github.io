@@ -5,7 +5,7 @@ project:
 website:
   title: "Christian Fang"
   description: "Personal website of Christian Fang"
-  site-url: https://www.christianfang.eu
+  site-url: https://christianfang.eu
   repo-url: https://christianfang95.github.io
   open-graph: true
   navbar:
