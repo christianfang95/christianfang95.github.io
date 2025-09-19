@@ -2,7 +2,10 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/marginally-significant/index.html"
+      "/posts/simulations/index.html",
+      "/posts/marginally-significant/index.html",
+      "/posts/mlpm/index.html",
+      "/posts/interactions/index.html"
     ]
   }
 ]
