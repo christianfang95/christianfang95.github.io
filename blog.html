@@ -80,9 +80,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-image','listing-title','listing-date','listing-categories','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -146,8 +146,8 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Christian Fang" href="blog.xml" data-external="1"><meta property="og:title" content="Blog – Christian Fang">
-<meta property="og:image" content="https://christianfang95.github.io/posts/marginally-significant/posts/marginally-significant/p_value.jpeg">
+<meta property="og:title" content="Blog – Christian Fang">
+<meta property="og:image" content="https://christianfang95.github.io/posts/marginally-significant/p_value.jpeg">
 <meta property="og:site_name" content="Christian Fang">
 </head>
 
@@ -169,10 +169,14 @@ window.Quarto = {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cv.html"> 
+<span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./research.html"> 
@@ -183,13 +187,14 @@ window.Quarto = {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv.html"> 
-<span class="menu-text">Curriculum Vitae</span></a>
+    <a class="nav-link" href="./contact.html"> 
+<span class="menu-text">Contact</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools tools-wide">
     <a href="https://github.com/christianfang95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/fangchris95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
     <a href="https://scholar.google.de/citations?user=FePrRkEAAAAJ" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bank2"></i></a>
 </div>
       </div> <!-- /container-fluid -->
@@ -199,9 +204,9 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cC12YWx1ZXM=">p-values <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(1)</span></div></div></div>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -230,10 +235,10 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3AtdmFsdWVz" data-listing-date-sort="1669330800000" data-listing-file-modified-sort="1748987352035" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1859">
+<div class="quarto-post image-right" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3AtdmFsdWVz" data-listing-date-sort="1669330800000" data-listing-file-modified-sort="1758286445318" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1859">
 <div class="thumbnail"><a href="./posts/marginally-significant/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/marginally-significant/posts/marginally-significant/p_value.jpeg" class="thumbnail-image">
+<img loading="lazy" src="./posts/marginally-significant/p_value.jpeg" class="thumbnail-image">
 
 </a></div>
 <div class="body">
@@ -248,16 +253,13 @@ window.Quarto = {
 
 </div>
 <div class="delink listing-description"><a href="./posts/marginally-significant/index.html" class="no-external">
-<p>Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they’re wrong.</p>
+<p>Some researchers claim that some non-significant p-values are actually “marginally significant”. Find out why they’re wrong.</p>
 </a></div>
 </div>
 <div class="metadata">
 <a href="./posts/marginally-significant/index.html" class="no-external">
 <div class="listing-date">
 Nov 25, 2022
-</div>
-<div class="listing-author">
-Christian Fang
 </div>
 </a>
 </div>
