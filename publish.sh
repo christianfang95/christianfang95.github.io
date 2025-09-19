@@ -11,7 +11,7 @@ echo "➡️ Pushing to GitHub..."
 git push -u origin main
 
 echo "➡️ Cleaning Quarto build..."
-quarto clean
+quarto project clean
 
 echo "➡️ Rendering site..."
 quarto render
