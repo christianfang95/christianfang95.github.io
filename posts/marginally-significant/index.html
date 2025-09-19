@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Christian Fang">
+<meta name="dcterms.date" content="2022-11-25">
+<meta name="description" content="Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they’re wrong.">
+
+<title>There are no “marginally significant” p-values – Christian Fang</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15ea27bac76f9890c21e80949f497921.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8143d892e0ed555d9c4932a0b7ddc6cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="There are no “marginally significant” p-values – Christian Fang">
+<meta property="og:description" content="Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they’re wrong.">
+<meta property="og:image" content="https://christianfang95.github.io/posts/marginally-significant/posts/marginally-significant/p_value.jpeg">
+<meta property="og:site_name" content="Christian Fang">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christian Fang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../cv.html"> 
+<span class="menu-text">Curriculum Vitae</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/christianfang95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://scholar.google.de/citations?user=FePrRkEAAAAJ" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bank2"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">There are no “marginally significant” p-values</h1>
+                  <div>
+        <div class="description">
+          Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they’re wrong.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">p-values</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Christian Fang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 25, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#what-do-people-mean-by-marginally-significant-p-values" id="toc-what-do-people-mean-by-marginally-significant-p-values" class="nav-link" data-scroll-target="#what-do-people-mean-by-marginally-significant-p-values">What do people mean by “marginally significant” <span class="math inline">p</span>-values?</a></li>
+  <li><a href="#why-do-people-claim-to-have-found-marginally-significant-p-values-if-there-is-no-such-thing" id="toc-why-do-people-claim-to-have-found-marginally-significant-p-values-if-there-is-no-such-thing" class="nav-link" data-scroll-target="#why-do-people-claim-to-have-found-marginally-significant-p-values-if-there-is-no-such-thing">Why do people claim to have found “marginally significant” p-values if there is no such thing?</a>
+  <ul>
+  <li><a href="#reason-1-mixing-up-frameworks-for-interpreting-p-values" id="toc-reason-1-mixing-up-frameworks-for-interpreting-p-values" class="nav-link" data-scroll-target="#reason-1-mixing-up-frameworks-for-interpreting-p-values">Reason 1: Mixing up frameworks for interpreting <span class="math inline">p</span>-values</a></li>
+  <li><a href="#reason-2-academic-publish-or-perish-environment-and-researchers-disappointment" id="toc-reason-2-academic-publish-or-perish-environment-and-researchers-disappointment" class="nav-link" data-scroll-target="#reason-2-academic-publish-or-perish-environment-and-researchers-disappointment">Reason 2: Academic publish or perish environment and researchers’ disappointment</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Researchers use <span class="math inline">p</span>-values in the context of hypothesis testing to decide whether to accept or reject the null hypothesis. The routine goes as follows: before running the analysis/the hypothesis test, we decide on a significance level (or “alpha level”, typically 5% or 0.05) below which we decide to reject the null hypothesis. Next, we run the analysis/hypothesis test, and compute the <span class="math inline">p</span>-value. If the <span class="math inline">p</span>-value is below the significance level, we reject the null hypothesis: the <span class="math inline">p</span>-value is “statistically significant”. If the <span class="math inline">p</span>-value is above the significance level, we “fail to reject” the null hypothesis: the <span class="math inline">p</span>-value is not statistically significant.</p>
+<p>This is illustrated in this nifty pic. If we get a small <span class="math inline">p</span>-value we are usually happy (no matter how close it is to 0.05), if we get a big <span class="math inline">p</span>-value we cry (and wonder if our paper will ever get published). But what about <span class="math inline">p</span>-values that are “hovering” just above 0.05?</p>
+<p><img src="p_value.jpeg" class="image-fluid mx-auto d-block img-fluid"></p>
+<p>In many published papers you will find such a “third kind” of <span class="math inline">p</span>-value, which is commonly called the “marginally significant” <span class="math inline">p</span>-value. Alternative names include <span class="math inline">p</span>-values that are “trending towards significance”, “approaching significance”, “hovering just above the significance level”, or “almost significant”.</p>
+<p>Such “marginally significant” <span class="math inline">p</span>-values, however, simply do not exist. In other words, labeling some <span class="math inline">p</span>-values as “marginally significant” is a statistical mistake (which is why I use this term between ” “). Let me tell you why.</p>
+</section>
+<section id="what-do-people-mean-by-marginally-significant-p-values" class="level1">
+<h1>What do people mean by “marginally significant” <span class="math inline">p</span>-values?</h1>
+<p>In the null hypothesis significance testing framework, we use the <span class="math inline">p</span>-value to decide whether we reject or fail to reject the null. Just like there are only two possible outcomes, there are only two kinds of <span class="math inline">p</span>-values: significant ones and non-significant ones. Researchers who claim to have found “marginally significant” <span class="math inline">p</span>-values, thus, essentially claim that there is a some (vaguely/subjectively-defined) subset of non-significant <span class="math inline">p</span>-values that one could (or perhaps even should!) still interpret as significant.</p>
+<p>The practice to label some non-significant <span class="math inline">p</span>-values as “marginally significant” dates back over 75 years ago. I found a paper published in <em>American Sociological Review</em> in <a href="https://www.jstor.org/stable/2087117?seq=3#metadata_info_tab_contents">1946</a> in which the authors refer to “marginally signficiant” <span class="math inline">p</span>-values. So, suffice to say, it’s a mistake that people have been making for a very, very long time, and that has become ingrained in statistical practice in many disciplines.</p>
+<p>While there is no definition of what a “marginally significant” <span class="math inline">p</span>-value is supposed to be (because they do not exist in statistical terms), an empirical analysis of psychology studies found that researchers generally seem to define <span class="math inline">p</span>-values between 0.05 and 0.10 as “marginally significant”, though some researchers have apparently labeled <span class="math inline">p</span>-values as big as 0.18 as “marginally significant” <a href="https://journals.sagepub.com/doi/abs/10.1177/0956797616645672?casa_token=QvY85WkWqlMAAAAA:taL4m6gL85a2ocmUvtWQtkYbe_GZtvSQzA0jZYppTIlgw58cFKEt_SOcbJJlu2wJos54sTGhf7uCtw">(see this excellent article for more details)</a>. This shows that there is little consistency in what is and isn’t supposed to be “marginally significant” - which makes sense, given that it’s a made-up term that you will for good reason not find in any statistics textbook.</p>
+<p>As a side note: my suspicion is that researchers speak of “marginally significant” <span class="math inline">p</span>-values only if they ran their analysis and the <span class="math inline">p</span>-value turned out to be “disappointingly big”. In other words, researchers claim that a non-significant <span class="math inline">p</span>-value is “marginally significant”, so that they can prove themselves right (i.e., they can conclude that their study results are in line with their hypothesis). Thus, researchers use their arbitrary gut feeling to after they conducted the analysis(!) decide that some non-significant <span class="math inline">p</span>-values are “marginally significant”.</p>
+<p>Such researchers commit two statistical crimes and a philosophy-of-science crime. The first statistical crime is that these researchers apparently alter their <span class="math inline">\alpha</span>-level post-hoc to fit their narrative (a form of confirmation bias and/or <span class="math inline">p</span>-hacking). Remember: the <span class="math inline">\alpha</span>-level is determined before you run the analysis, and not just changed afterwards. The second statistical crime is that these researchers make a subjective decision which is not backed by statistical theory and invent a whole new (but undefined) class of potential outcomes of a null hypothesis test (i.e., rejecting the null, failing to reject the null, failing to reject but at the same time still somehow rejecting the null).</p>
+<p>The philosophy-of-science crime is that, per Popper, we are supposed to try to <em>falsify</em> our hypotheses as stringently as possible, not come up with ever-fancier ways of proving ourselves right all the time. This misunderstanding has led to a detrimental culture in which researchers’ hypotheses are confirmed all the time (<a href="https://journals.sagepub.com/doi/abs/10.1177/25152459211007467">over 90% of the time!</a>), partly because many studies are <span class="math inline">p</span>-hacked or because the results of hypothesis tests are bent in such ways that they always “confirm” the study hypotheses, even if the data says otherwise. This is dangerous, as it might give students or the next generation of scientists the impression that the point of science is to prove your own preconceived notions to be correct (which is not the point, of course), or that they “made a mistake” if their <span class="math inline">p</span>-value is greater than 0.05 (which is nonsense, of course!)</p>
+</section>
+<section id="why-do-people-claim-to-have-found-marginally-significant-p-values-if-there-is-no-such-thing" class="level1">
+<h1>Why do people claim to have found “marginally significant” p-values if there is no such thing?</h1>
+<p>Obviously, I have no idea about what is actually going on in researchers’ heads when they label <span class="math inline">p</span>-values as “marginally signficant”, but I have two ideas about where this comes from. The first reason lies in poor education in statistics and a confusion between two competing paradigms for interpreting <span class="math inline">p</span>-values. The second reason is the pressure to publish and “be successful” in academia (success as measured by you getting <span class="math inline">p &lt;.05</span>), combined with the fact that papers with significant results are more likely to get published than papers that report “null findings”.</p>
+<section id="reason-1-mixing-up-frameworks-for-interpreting-p-values" class="level2">
+<h2 class="anchored" data-anchor-id="reason-1-mixing-up-frameworks-for-interpreting-p-values">Reason 1: Mixing up frameworks for interpreting <span class="math inline">p</span>-values</h2>
+<p>Historically, there were two mutually exclusive frameworks to interpret <span class="math inline">p</span>-values: Fisher’s and Neyman’s &amp; Pearson’s.</p>
+<p>Fisher intended for <span class="math inline">p</span>-values to be interpreted as a continuous measure of the strength of the evidence against the null hypothesis. Under this framework, a <span class="math inline">p</span>-value of 0.20 is viewed as weaker evidence against the null than a <span class="math inline">p</span>-value of 0.02.</p>
+<p>Neyman &amp; Pearson advocated to classify <span class="math inline">p</span>-values as either significant or not significant, based on a pre-defined threshold ( <span class="math inline">\alpha</span> ). If <span class="math inline">p&lt; \alpha</span>, we reject the null hypothesis. If <span class="math inline">p &gt; \alpha</span>, we fail to reject the null hypothesis.</p>
+<p>Our current way of interpreting <span class="math inline">p</span>-values is a mix of the two: on the one hand, we apply a decision rule (like in the Neyman-Pearson framework), on the other hand, we use stars to indicate how small a <span class="math inline">p</span>-value is: one star for <span class="math inline">p &lt; .05</span>, two stars for <span class="math inline">0.05 &lt; p &lt; .01</span>, and two stars for <span class="math inline">p &lt; .001</span>. Some R functions, like <code>lm()</code>, even use a dot ‘.’ for <span class="math inline">p</span>-values between 0.1 and 0.05:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(<span class="at">formula =</span> y <span class="sc">~</span> x1 <span class="sc">+</span> x2 <span class="sc">+</span> x3, <span class="at">data =</span> data))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>            Estimate Std. Error t value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>t<span class="sc">|</span>)    </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>(Intercept)  <span class="fl">2.95251</span>    <span class="fl">0.03297</span>   <span class="fl">89.55</span>   <span class="sc">&lt;</span><span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>x1          <span class="sc">-</span><span class="fl">1.50722</span>    <span class="fl">0.01847</span>  <span class="sc">-</span><span class="fl">81.58</span>   <span class="sc">&lt;</span><span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x2           <span class="fl">0.81344</span>    <span class="fl">0.01808</span>   <span class="fl">44.99</span>   <span class="sc">&lt;</span><span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>x3          <span class="sc">-</span><span class="fl">0.82236</span>    <span class="fl">0.03950</span>  <span class="sc">-</span><span class="fl">20.82</span>   <span class="sc">&lt;</span><span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> ‘<span class="sc">**</span><span class="er">*</span>’ <span class="fl">0.001</span> ‘<span class="sc">**</span>’ <span class="fl">0.01</span> ‘<span class="sc">*</span>’ <span class="fl">0.05</span> ‘.’ <span class="fl">0.1</span> ‘ ’ <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Researchers might be confused about the two paradigms and interpret <span class="math inline">p</span>-values in a more Fisherian fashion, and not evaluate them vis-a-vis a decision threshold. Or rather: researchers do acknowledge that <span class="math inline">p</span>-values should be below the chosen <span class="math inline">\alpha</span>-level in order to be interpreted as significant, but if the <span class="math inline">p</span>-value is - in their subjective perception - “close enough” to 0.05, it is “practically” significant, by only a small margin. A.k.a., the <span class="math inline">p</span>-value is “marginally significant”.</p>
+<p>Unfortunately, such an interpretation makes no sense. None of the three frameworks allow for the existence of “marginally significant” <span class="math inline">p</span>-values. In Fisher’s framework, there is no hard boundary at which <span class="math inline">p</span>-values automatically become “significant”. Per Fisher you would conclude that <span class="math inline">p=0.049</span> and <span class="math inline">p=0.051</span> constitute practically equivalent evidence against the null, but you would not call either “significant” per se. In Neyman-Pearson and our current way of interpreting <span class="math inline">p</span>-values, we are interested in whether <span class="math inline">p&lt; \alpha</span>. There is no third kind of <span class="math inline">p</span>-value that hovers just above our chosen <span class="math inline">\alpha</span>-level.</p>
+</section>
+<section id="reason-2-academic-publish-or-perish-environment-and-researchers-disappointment" class="level2">
+<h2 class="anchored" data-anchor-id="reason-2-academic-publish-or-perish-environment-and-researchers-disappointment">Reason 2: Academic publish or perish environment and researchers’ disappointment</h2>
+<p>Studies in academia take a lot of time to conduct and write up, and oftentimes even longer to get published. Imagine you are a researcher who has spent the last two years (and potentially thousands, if not hundreds of thousands, of euros of tax payers’ money) on a study. You collected the data, ran the analysis, and the <span class="math inline">p</span>-value of your hypothesis test is 0.06. The horror! How are you gonna get this published??? You know that journals are way more likely to publish papers that have significant <span class="math inline">p</span>-values than papers reporting “null findings”! You were so sure that you were gonna get a significant <span class="math inline">p</span>-value!</p>
+<p>What do you do?</p>
+<p>The best option is, of course, to report the true outcome: the <span class="math inline">p</span>-value is above the chosen <span class="math inline">\alpha</span> level, so based on the data that you have, there is insufficient evidence to reject the null. No biggie. Alternatively, you could resort to questionable or downright unethical research practices like <span class="math inline">p</span>-hacking. Or you could label your result “marginally significant”, implying that “in the right light, if I had a somewhat bigger sample size, if the stars aligned, this would be significant, I swear!”</p>
+<p>To be clear, the second option is terrible, don’t do it! The third option is somewhat better, but you should still not do it. For once, you are bending the rules: you shouldn’t willy-nilly change your <span class="math inline">\alpha</span>-level after running the analysis just because you don’t like the result (that’s not science). Second, you don’t actually know if you would get a “more significant” <span class="math inline">p</span>-value if you had more data/if the sample size were bigger.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>There are no “marginally significant” <span class="math inline">p</span>-values, under any framework for interpreting <span class="math inline">p</span>-values. Claiming some effect or <span class="math inline">p</span>-value is “marginally significant” is wrong: in the null hypothesis testing framework there are just significant and non-significant <span class="math inline">p</span>-values, there is not even a definition of what a “marginally significant” <span class="math inline">p</span>-value is supposed to be. Using the term “marginally significant” is disingenuous, and honestly renders the whole affair of using a threshold to determine whether or not to reject the null hypothesis pointless. If you are just going to interpret the results any way you want, why use statistics to begin with?</p>
+<p>Either your <span class="math inline">p</span>-value is above or below the a priori chosen significance level. It’s that simple.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>If you want to read more about “marginally signficant” <span class="math inline">p</span>-values, check out these excellent papers:</p>
+<p>Gibbs, N. M., &amp; Gibbs, S. V. (2015). Misuse of ‘trend’to describe ‘almost significant’ differences in anaesthesia research. <em>British Journal of Anaesthesia</em>, 115(3), 337-339. <a href="https://academic.oup.com/bja/article/115/3/337/312358">Link</a></p>
+<p>Johnson, V. E. (2019). Evidence from marginally significant t statistics. <em>The American Statistician</em>, 73(sup1), 129-134. <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.2018.1518788">Link</a></p>
+<p>Lakens, D. (2021). The practical alternative to the p value is the correctly used p value. <em>Perspectives on psychological science</em>, 16(3), 639-648. <a href="https://journals.sagepub.com/doi/abs/10.1177/1745691620958012">Link</a></p>
+<p>Pritschet, L., Powell, D., &amp; Horne, Z. (2016). Marginally significant effects as evidence for hypotheses: Changing attitudes over four decades. <em>Psychological science</em>, 27(7), 1036-1042. <a href="https://journals.sagepub.com/doi/abs/10.1177/0956797616645672">Link</a></p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{fang2022,
+  author = {Fang, Christian},
+  title = {There Are No “Marginally Significant” p-Values},
+  date = {2022-11-25},
+  url = {https://christianfang95.github.io/posts/marginally-significant/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-fang2022" class="csl-entry quarto-appendix-citeas" role="listitem">
+Fang, Christian. 2022. <span>“There Are No <span>‘Marginally
+Significant’</span> p-Values.”</span> November 25, 2022. <a href="https://christianfang95.github.io/posts/marginally-significant/">https://christianfang95.github.io/posts/marginally-significant/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/christianfang95\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

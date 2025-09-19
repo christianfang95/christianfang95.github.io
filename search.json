@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "There are no “marginally significant” p-values\n\n\n\nstatistics\n\np-values\n\n\n\nSome researchers claim that some non-significant p-values are actually marginally significant. Find out why they’re wrong.\n\n\n\n\n\nNov 25, 2022\n\n\nChristian Fang\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/marginally-significant/index.html",
+    "href": "posts/marginally-significant/index.html",
+    "title": "There are no “marginally significant” p-values",
+    "section": "",
+    "text": "Researchers use p-values in the context of hypothesis testing to decide whether to accept or reject the null hypothesis. The routine goes as follows: before running the analysis/the hypothesis test, we decide on a significance level (or “alpha level”, typically 5% or 0.05) below which we decide to reject the null hypothesis. Next, we run the analysis/hypothesis test, and compute the p-value. If the p-value is below the significance level, we reject the null hypothesis: the p-value is “statistically significant”. If the p-value is above the significance level, we “fail to reject” the null hypothesis: the p-value is not statistically significant.\nThis is illustrated in this nifty pic. If we get a small p-value we are usually happy (no matter how close it is to 0.05), if we get a big p-value we cry (and wonder if our paper will ever get published). But what about p-values that are “hovering” just above 0.05?\n\nIn many published papers you will find such a “third kind” of p-value, which is commonly called the “marginally significant” p-value. Alternative names include p-values that are “trending towards significance”, “approaching significance”, “hovering just above the significance level”, or “almost significant”.\nSuch “marginally significant” p-values, however, simply do not exist. In other words, labeling some p-values as “marginally significant” is a statistical mistake (which is why I use this term between ” “). Let me tell you why."
+  },
+  {
+    "objectID": "posts/marginally-significant/index.html#reason-1-mixing-up-frameworks-for-interpreting-p-values",
+    "href": "posts/marginally-significant/index.html#reason-1-mixing-up-frameworks-for-interpreting-p-values",
+    "title": "There are no “marginally significant” p-values",
+    "section": "Reason 1: Mixing up frameworks for interpreting p-values",
+    "text": "Reason 1: Mixing up frameworks for interpreting p-values\nHistorically, there were two mutually exclusive frameworks to interpret p-values: Fisher’s and Neyman’s & Pearson’s.\nFisher intended for p-values to be interpreted as a continuous measure of the strength of the evidence against the null hypothesis. Under this framework, a p-value of 0.20 is viewed as weaker evidence against the null than a p-value of 0.02.\nNeyman & Pearson advocated to classify p-values as either significant or not significant, based on a pre-defined threshold ( \\alpha ). If p&lt; \\alpha, we reject the null hypothesis. If p &gt; \\alpha, we fail to reject the null hypothesis.\nOur current way of interpreting p-values is a mix of the two: on the one hand, we apply a decision rule (like in the Neyman-Pearson framework), on the other hand, we use stars to indicate how small a p-value is: one star for p &lt; .05, two stars for 0.05 &lt; p &lt; .01, and two stars for p &lt; .001. Some R functions, like lm(), even use a dot ‘.’ for p-values between 0.1 and 0.05:\nsummary(lm(formula = y ~ x1 + x2 + x3, data = data))\n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  2.95251    0.03297   89.55   &lt;2e-16 ***\nx1          -1.50722    0.01847  -81.58   &lt;2e-16 ***\nx2           0.81344    0.01808   44.99   &lt;2e-16 ***\nx3          -0.82236    0.03950  -20.82   &lt;2e-16 ***\n---\nSignif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\nResearchers might be confused about the two paradigms and interpret p-values in a more Fisherian fashion, and not evaluate them vis-a-vis a decision threshold. Or rather: researchers do acknowledge that p-values should be below the chosen \\alpha-level in order to be interpreted as significant, but if the p-value is - in their subjective perception - “close enough” to 0.05, it is “practically” significant, by only a small margin. A.k.a., the p-value is “marginally significant”.\nUnfortunately, such an interpretation makes no sense. None of the three frameworks allow for the existence of “marginally significant” p-values. In Fisher’s framework, there is no hard boundary at which p-values automatically become “significant”. Per Fisher you would conclude that p=0.049 and p=0.051 constitute practically equivalent evidence against the null, but you would not call either “significant” per se. In Neyman-Pearson and our current way of interpreting p-values, we are interested in whether p&lt; \\alpha. There is no third kind of p-value that hovers just above our chosen \\alpha-level."
+  },
+  {
+    "objectID": "posts/marginally-significant/index.html#reason-2-academic-publish-or-perish-environment-and-researchers-disappointment",
+    "href": "posts/marginally-significant/index.html#reason-2-academic-publish-or-perish-environment-and-researchers-disappointment",
+    "title": "There are no “marginally significant” p-values",
+    "section": "Reason 2: Academic publish or perish environment and researchers’ disappointment",
+    "text": "Reason 2: Academic publish or perish environment and researchers’ disappointment\nStudies in academia take a lot of time to conduct and write up, and oftentimes even longer to get published. Imagine you are a researcher who has spent the last two years (and potentially thousands, if not hundreds of thousands, of euros of tax payers’ money) on a study. You collected the data, ran the analysis, and the p-value of your hypothesis test is 0.06. The horror! How are you gonna get this published??? You know that journals are way more likely to publish papers that have significant p-values than papers reporting “null findings”! You were so sure that you were gonna get a significant p-value!\nWhat do you do?\nThe best option is, of course, to report the true outcome: the p-value is above the chosen \\alpha level, so based on the data that you have, there is insufficient evidence to reject the null. No biggie. Alternatively, you could resort to questionable or downright unethical research practices like p-hacking. Or you could label your result “marginally significant”, implying that “in the right light, if I had a somewhat bigger sample size, if the stars aligned, this would be significant, I swear!”\nTo be clear, the second option is terrible, don’t do it! The third option is somewhat better, but you should still not do it. For once, you are bending the rules: you shouldn’t willy-nilly change your \\alpha-level after running the analysis just because you don’t like the result (that’s not science). Second, you don’t actually know if you would get a “more significant” p-value if you had more data/if the sample size were bigger."
+  },
+  {
+    "objectID": "research.html",
+    "href": "research.html",
+    "title": "Research",
+    "section": "",
+    "text": "Published\n\n2024\nLenny Stoeldraijer, Coen van Duin, Peteke Feijten, Christian Fang, and Niels Kooiman. (2024) \"Huishoudensprognose 2024-2070: bijna 10 miljoen huishoudens verwacht in 2070.\" Statistische Trends\n        \n        Published\n    \nChristian Fang, Anne-Rigt Poortman, and M.D. (Anne) Brons. (2024) \"Parents’ perceptions of cohesion in diverse stepfamilies.\" Family Relations\n        \n        Published\n    \nChristian Fang. (2024) \"Family life in postdivorce families.\" Utrecht University\n        \n        Published\n    \n2023\nChristian Fang and Ulrike Zartler. (2023) \"Adolescents’ experiences with ambiguity in postdivorce stepfamilies.\" Journal of Marriage and Family\n        \n        Published\n    \nChristian Fang and Anne-Rigt Poortman. (2023) \"Whom do married and divorced parents consider kin?.\" European Societies\n        \n        Published\n    \nChristian Fang, Qixiang Fang, and Dong Nguyen. (2023) \"Epicurus at SemEval-2023 Task 4: Improving Prediction of Human Values behind Arguments by Leveraging Their Definitions.\" Proceedings of the 17th International Workshop on Semantic Evaluation (SemEval-2023)\n        \n        Preprint\n     \n        \n        Published\n    \n2022\nChristian Fang. (2022) \"De Bel, Vera (2020). The ripple effect in family networks: Relational structures and well-being in divorced and non-divorced families.(166 p.). Groningen: University of Groningen. ISBN 978-94-034-2725-6..\" Mens & Maatschappij\n        \n        Published\n    \nChristian Fang, Anne-Rigt Poortman, and Tanja van der Lippe. (2022) \"Family rituals in postdivorce families: The role of family structure and relationship quality for parents’ and stepparents’ attendance at children’s birthdays.\" Journal of Family Research\n        \n        Preprint\n     \n        \n        Published\n    \n2021\nChristian Fang and Ilse van Liempt. (2021) \"‘We prefer our Dutch’: International students’ housing experiences in the Netherlands.\" Housing Studies\n        \n        Published\n    \n2019\nChristian Fang and Isa van der Wielen. (2019) \"Stigma op achterstandswijken–onjuist, onwaar en oneerlijk.\" AGORA: Magazine voor Sociaalruimtelijke vraagstukken\n        \n        Published\n    \n\nWorking Papers / Non-archival"
+  },
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "contact",
+    "section": "",
+    "text": "Send me an e-mail: hello@christianfang.eu"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Hi there!",
+    "section": "",
+    "text": "I am a statistical researcher in the demography team of Statistics Netherlands (CBS). Before joining Statistics Netherlands, I obtained a PhD at the Department of Sociology, Utrecht University. In my free time, I do CrossFit 4-5 times a week and care deeply about politics. Some of my favorite blogs are Reality’s Last Stand, Citation Needed and Helen Joyce.\nOn this website, you will find my publications, nerdy statistics blogs, and contact information.\nNote that all opinions expressed on this website are strictly my own and are in no way supposed to reflect those of Statistics Netherlands."
+  },
+  {
+    "objectID": "cv.html",
+    "href": "cv.html",
+    "title": "Curriculum Vitae",
+    "section": "",
+    "text": "Statistics Netherlands/Centraal Bureau voor de Statistiek (CBS) Sept 2023 – Present\n\nProducing (register-based) statistics on family formation and dissolution, with a special focus on unmarried cohabitation and same-sex families\nCollaborating with academic researchers on scientific publications\nMethodological and process innovations, e.g., transitioning from SPSS to R or benchmarking different statistical approaches and models\n\n\n\n\nDepartment of Sociology, Utrecht University Sept 2019 - Aug 2023\n\nQuantitative research on postdivorce families, cumulating in my doctoral dissertation (see below)\nTeaching statistics workgroups"
+  },
+  {
+    "objectID": "cv.html#employment",
+    "href": "cv.html#employment",
+    "title": "Curriculum Vitae",
+    "section": "",
+    "text": "Statistics Netherlands/Centraal Bureau voor de Statistiek (CBS) Sept 2023 – Present\n\nProducing (register-based) statistics on family formation and dissolution, with a special focus on unmarried cohabitation and same-sex families\nCollaborating with academic researchers on scientific publications\nMethodological and process innovations, e.g., transitioning from SPSS to R or benchmarking different statistical approaches and models\n\n\n\n\nDepartment of Sociology, Utrecht University Sept 2019 - Aug 2023\n\nQuantitative research on postdivorce families, cumulating in my doctoral dissertation (see below)\nTeaching statistics workgroups"
+  },
+  {
+    "objectID": "cv.html#education",
+    "href": "cv.html#education",
+    "title": "Curriculum Vitae",
+    "section": "Education",
+    "text": "Education\n\nDoctor of Philosophy, Sociology\nDepartment of Sociology, Utrecht University, The Netherlands awarded March 1st, 2024\nDissertation:Family life in postdivorce families\nSupervisors: prof. dr. Anne-Rigt Poortman, prof. dr. Tanja van der Lippe\n\n\nM.Sc, Urban and Economic Geography\nFaculty of Geosciences, Utrecht University, The Netherlands Sept 2017 - July 2019\nThesis: ‘We prefer our Dutch’: International students’ housing experiences in the Netherlands\n\n\nB.Sc., Geography\nFaculty of Geosciences, Ruhr University Bochum, Germany Oct 2014 - July 2017"
+  }
+]

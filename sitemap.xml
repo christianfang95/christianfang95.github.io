@@ -1,1 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?> <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> <url> <loc>https://christianfang95.github.io/news/announcement_1/</loc> <lastmod>2015-10-22T19:59:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/news/announcement_2/</loc> <lastmod>2015-11-07T20:11:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/news/announcement_3/</loc> <lastmod>2016-01-15T11:59:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/blog/2022/interactions/</loc> <lastmod>2022-10-31T00:00:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/blog/2022/mlpm/</loc> <lastmod>2022-11-17T00:00:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/blog/2022/marg-sig/</loc> <lastmod>2022-11-25T00:00:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/blog/2023/simulations/</loc> <lastmod>2023-03-18T00:00:00+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/1_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/2_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/3_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/4_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/5_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/projects/6_project/</loc> <lastmod>2025-09-19T11:29:23+00:00</lastmod> </url> <url> <loc>https://christianfang95.github.io/</loc> </url> <url> <loc>https://christianfang95.github.io/resume/</loc> </url> <url> <loc>https://christianfang95.github.io/news/</loc> </url> <url> <loc>https://christianfang95.github.io/publications/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/statistics/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/dataviz/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/r/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/lpm/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/regression/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/tag/p-values/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/2022/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/2023/</loc> </url> <url> <loc>https://christianfang95.github.io/blog/</loc> </url> </urlset>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://christianfang95.github.io/blog.html</loc>
+    <lastmod>2025-06-03T20:20:52.766Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/about.html</loc>
+    <lastmod>2025-06-03T20:06:52.138Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/posts/marginally-significant/index.html</loc>
+    <lastmod>2025-06-03T21:49:12.035Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/research.html</loc>
+    <lastmod>2025-06-03T21:49:13.834Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/contact.html</loc>
+    <lastmod>2025-06-07T18:37:06.788Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/index.html</loc>
+    <lastmod>2025-09-19T10:38:07.421Z</lastmod>
+  </url>
+  <url>
+    <loc>https://christianfang95.github.io/cv.html</loc>
+    <lastmod>2025-09-19T10:20:45.893Z</lastmod>
+  </url>
+</urlset>
