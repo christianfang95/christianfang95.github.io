@@ -10,8 +10,8 @@ git commit -m "Update site on $(date '+%Y-%m-%d %H:%M:%S')" || echo "ℹ️ No c
 echo "➡️ Pushing to GitHub..."
 git push -u origin main
 
-echo "➡️ Cleaning Quarto build..."
-quarto project clean
+# echo "➡️ Cleaning Quarto build..."
+# quarto project clean
 
 echo "➡️ Rendering site..."
 quarto render
