@@ -2,7 +2,7 @@
 layout: post
 title:  There are no "marginally significant" p-values
 date: "2022-11-25" 
-description: Some researchers claim that some non-significant p-values are actually marginally significant. Find out why they're wrong.
+description: Some researchers claim that some non-significant p-values are actually "marginally significant". Find out why they're wrong.
 categories: 
   - statistics 
   - p-values
@@ -11,7 +11,9 @@ toc:
 engine: markdown
 code-fold:
     true
-image: posts/marginally-significant/p_value.jpeg
+image: p_value.jpeg
+resources:
+  - p_value.jpeg
 ---
 
 # Introduction

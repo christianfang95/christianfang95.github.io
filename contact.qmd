@@ -1,6 +1,6 @@
 ---
-title: "contact"
+title: "Contact"
 format: html
 ---
 
-Send me an e-mail: hello@christianfang.eu
+You can always drop me a line at [hello@christianfang.eu](mailto:hello@christianfang.eu)

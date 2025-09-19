@@ -11,15 +11,19 @@ website:
   navbar:
     background: dark
     foreground: light
-    left:
+    right:
       - href: index.qmd
         text: Home
+      - href: cv.qmd
+        text: CV
       - href: research.qmd
       - href: blog.qmd
-      - href: cv.qmd
+      - href: contact.qmd
     tools:
       - icon: github
         href: https://github.com/christianfang95/
+      - icon: linkedin
+        href: https://www.linkedin.com/in/fangchris95/
       - icon: bank2
         href: https://scholar.google.de/citations?user=FePrRkEAAAAJ
 

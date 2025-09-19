@@ -4,6 +4,8 @@ listing:
   contents: posts
   sort: "date desc"
   type: default
-  categories: true
-  feed: true
+  fields: [image, title, date, categories, description]
+  # optional tuning:
+  # image-placeholder: false
+  # image-align: left
 ---
