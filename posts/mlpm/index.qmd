@@ -13,9 +13,9 @@ toc:
 engine: markdown
 code-fold:
     true
-image: mplm.png
+image: mlpm.png
 resources:
-  - mplm.png
+  - mlpm.png
 ---
 
 # Introduction

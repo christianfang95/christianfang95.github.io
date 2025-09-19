@@ -12,9 +12,9 @@ toc:
 engine: markdown
 code-fold:
     true
-image: interaction_dummy_cont.png
+image: interacton_dummy_cont.png
 resources:
-  - interaction_dummy_cont.png
+  - interacton_dummy_cont.png
   - interaction_cont_cont.png
   - interaction_dummy_dummy.png
 ---

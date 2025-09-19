@@ -12,11 +12,9 @@ toc:
 engine: markdown
 code-fold:
     true
-image: interaction_dummy_cont.png
+image: hist_reg.png
 resources:
-  - interaction_dummy_cont.png
-  - interaction_cont_cont.png
-  - interaction_dummy_dummy.png
+  - hist_reg.png
 ---
 
 You probably know that statistical and machine learning methods are are based on a lot of math. So. much. math. For example, we can prove mathematically that OLS estimates $\hat\beta$ - provided all of the Gauss-Markov assumptions are met - will in the long run converge to the true population parameters $\beta$.
