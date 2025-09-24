@@ -7,7 +7,7 @@ about:
 ---
 
 ::: {#hero-heading}
-I am a statistical researcher in the demography team of [Statistics Netherlands (CBS)](http://cbs.nl/). Before joining Statistics Netherlands, I obtained a PhD at the Department of Sociology, Utrecht University. In my free time, I do CrossFit 4-5 times a week and care deeply about politics. Some of my favorite blogs are [Reality's Last Stand](https://www.realityslaststand.com), [Citation Needed](https://www.citationneededpodcast.com) and [Helen Joyce](https://www.thehelenjoyce.com).
+I am a statistical researcher in the demography team of [Statistics Netherlands (CBS)](http://cbs.nl/). Before joining Statistics Netherlands, I obtained a PhD at the Department of Sociology, Utrecht University. In my free time, I do CrossFit 4-5 times a week and care deeply about politics. 
 
 On this website, you will find my publications, nerdy statistics blogs, and contact information.
 
