@@ -1,0 +1,224 @@
+---
+layout: post
+title:  Let's Talk About Sex (and Demography)
+date: "2025-09-24" 
+description: Gender self-ID may affirm individual identities, but undermines the interpretability of sex-disaggregated statistics that are indispensable for demographic forecasting, healthcare planning, and equality monitoring.
+categories: 
+  - statistics
+  - demography
+toc:
+  true
+engine: markdown
+code-fold:
+    true
+bibliography: references.bib
+
+image: pop_pyramid.svg
+#resources:
+#  - mlpm.png
+---
+
+*Note: This article reflects my personal opinions, not those of my employer.*  
+
+Germany introduced its gender self-identification act (Selbstbestimmungsgesetz) in late 2024. The law allows individuals to change their sex marker once per year through a simple declaration at the local courthouse. The Netherlands planned a similar legal change, though the draft was retracted due to lack of support in the current parliament. The stated intention is to respect and affirm individuals’ gender identities. However, from the perspective of official statistics and demography, such reforms introduce substantial challenges.  
+
+Sex-disaggregated data form the foundation of demographic analysis, fertility and mortality statistics, healthcare planning, labor market monitoring, and international comparability. If “sex” is redefined as a mutable and subjective administrative category, these statistics risk losing their meaning altogether. The core concern is not ideological but conceptual: many of the most important demographic and health indicators are meaningful only if sex reflects biology. If this link is severed, statistics become uninterpretable, forecasts unreliable, and policy decisions distorted.  
+
+
+# 1. Conceptual Foundations
+
+## 1.1 Sex
+In biology, sex is defined by the reproductive role of an organism—specifically, the type of gamete it produces (or is organized to produce). Males produce small gametes (sperm), while females produce large gametes (ova). This anisogamy-based definition applies universally to mammals, including humans, and establishes sex as a binary trait [@bhargava2021considering; @Dawkins_1976].  
+
+Critics often argue that such a definition “erases” intersex individuals, framing them as evidence of a spectrum rather than a binary [@FaustoSterling_1993; @FaustoSterling_2000]. Yet biological consensus is clear: intersex conditions represent variations within the male–female binary, not a third reproductive class. While some individuals have atypical chromosomal, hormonal, or anatomical features, every known human falls within the framework of male or female. No documented case exists of a person simultaneously producing both viable sperm and ova [@Sax_2002]. For statistical purposes, sex can therefore be consistently operationalized as a binary variable, even if clinical expertise is sometimes required to record it.  
+
+## 1.2 Gender and Self-ID
+By contrast, “gender” typically refers to an individual’s internal sense of identity and social role, which may or may not align with biological sex [@West_Zimmerman_1987; @Butler_1990]. Queer and trans theorists argue that gender is socially constructed, fluid, and historically contingent [@Spade_2011; @Halberstam_2005].  
+
+Self-identification policies operationalize this view by allowing individuals to change their legal sex marker based solely on self-declaration, without medical or psychological evaluation. Historically, legal recognition of a sex change required lengthy medical and legal procedures, reflecting what Dean Spade calls the “administrative violence” of gatekeeping [@Spade_2011]. Under self-ID, this requirement is removed, and the sex marker becomes a reflection of personal declaration rather than biological reality.  
+
+## 1.3 From Rare Exceptions to Systemic Instability
+Even under the previous medical/legal regime, the demographic categories of male or female were not perfectly “pure.” Individuals who successfully transitioned legally were reclassified in registers, creating some distortion of male and female categories. But because such cases were rare—limited to those who underwent extensive medical and legal procedures—the statistical impact was contained.  
+
+Self-ID fundamentally alters this balance. What was once rare and exceptional becomes administratively simple and potentially widespread. Survey evidence from the Netherlands suggests that nearly one million people—around 6% of the adult population—would consider registering an “X” marker under a self-ID regime [@Rutgers_2023]. This is not a marginal distortion but a systemic break in statistical continuity.  
+
+# 2. Consequences for Official Statistics
+
+## 2.1 Loss of Semantic Coherence
+
+The most immediate consequence of self-ID regimes is that certain statistics lose their substantive meaning. If legal sex replaces biological sex in administrative data, categories such as “male fertility” or “non-binary fertility” will appear. These are conceptually incoherent from a demographic perspective, because fertility and mortality processes are tied to reproductive biology, not self-declared identity.
+
+### 2.1.1 Fertility and the Female Sex Class
+Formally, consider the total fertility rate (TFR):
+$$
+\text{TFR} = \sum_a \frac{B_a}{W_a} \cdot k,
+$$
+
+where $B_a$ is the number of births to women of age $a$, $W_a$ is the number of women of age $a$, and $k$ is a scaling constant (usually 5 for 5-year age groups). The denominator $W_a$ is meaningful only if “women” refers to individuals biologically capable of childbearing (i.e., females with a uterus).  
+
+If the denominator includes males who are legally reclassified as female, it introduces individuals who are categorically incapable of pregnancy. If, conversely, biologically female individuals are recorded as male or non-binary, their births inflate the numerator but not the denominator. In both cases, the statistic ceases to measure what it was designed to measure: female fertility.
+
+It is sometimes argued that fertility statistics are already flawed because not all women can give birth. Yet demographic indicators operate at the group level, not the individual level. The TFR does not assume that every woman will reproduce, but that fertility is restricted to the female sex class. Including infertile or post-reproductive women is not an error but part of the design: the measure captures the average number of births per woman, given the distribution of fertility across the population. This is conceptually distinct from including males, who are never members of the reproductive sex class.
+
+### 2.1.2 Fertility, Family Diversity, and Forecasting
+Another critique is that fertility measures reinforce heteronormative assumptions, especially since same-sex couples can also become parents [@Valentine_2007]. This, however, confuses athways to parenthood with fertility as a biological process. Adoption, step-parenthood, and surrogacy are important social realities, but they do not change the fact that every birth requires a uterus. The very existence of surrogacy debates highlights this: male couples can only become biological parents through the involvement of a female gestational surrogate. Fertility rates therefore remain indispensable as measures of biological reproduction and population replacement.
+
+Forecasting also does not assume heterosexual, monogamous marriages. It tracks births and cohort sizes, not family forms. Whether a child is raised by heterosexual parents, same-sex parents, or a single parent is irrelevant for the measure itself. What matters is the number of children born, because this determines future school enrollments, labor supply, and pension obligations. Family structure can—and should—be studied in its own right, but it is not a substitute for fertility as a demographic variable.
+
+### 2.1.3 Implications for Planning
+The importance of fertility statistics is not abstract. They underpin population forecasts, which guide planning for schools, housing, pensions, and healthcare capacity [@Lutz_Sanderson_Scherbov_2001]. If fertility rates are distorted or rendered uninterpretable, projections of the working-age population, dependency ratios, and fiscal sustainability all become unreliable. Governments would effectively be forced to plan blind. Fertility statistics are therefore not relics of a “cis-heteronormative worldview,” but practical instruments of governance.  
+
+## 2.2 Break in Statistical Continuity
+
+If sex is redefined as a self-declared category, the underlying concept shifts from a stable biological attribute to a fluid social identity. This undermines:  
+
+- **Time series comparability:** Longitudinal measures such as fertility, mortality, and life expectancy become non-comparable if the meaning of “male” and “female” changes.  
+
+- **Cross-country comparability:** International statistical systems harmonize sex as a biological variable [@UN_2019; @Eurostat_2021; @OECD_2022]. Divergence reduces comparability.  
+
+- **Category stability:** In Germany, individuals may re-register annually. A person could thus be male in one year, female in the next, and “X” thereafter—an unprecedented source of instability for demographic series.  
+
+
+## 2.3 Distortion of Core Indicators
+
+In healthcare, many conditions are sex-specific (e.g., prostate cancer, cervical cancer). Consider cervical cancer incidence:
+
+$$
+I = \frac{C}{F}
+$$
+
+where $C$ is the number of cases and $F$ is the number of females at risk. If the denominator includes legally female but biologically male individuals (who lack cervices), the rate is downwardly biased. If biologically female individuals are legally recorded as male or non-binary, the rate is upwardly biased.  
+
+These statistics are not merely descriptive. They are used to plan how many gynecologists, obstetricians, and oncologists a healthcare system requires. Biologically male populations will never need obstetric care; biologically female populations will. If denominators are blurred, health systems risk under- or over-provision of essential services, directly affecting patient outcomes.  
+
+It is sometimes argued that sex-specific categories exclude transgender and non-binary patients [@Feder_2022]. But allocation must follow biological risk: biologically male patients are at risk of prostate cancer; biologically female patients of cervical cancer. Without this clarity, prevention and treatment misallocate scarce resources, harming patients.  
+
+Crime statistics face similar challenges. Some argue that disaggregating crime by sex reinforces stereotypes of men as violent and women as victims. Yet criminology consistently finds stark sex differences in offending. Recognizing these patterns is essential for effective prevention—for example, interventions targeted at male youth violence. Replacing biological sex with legal sex obscures these differences, leading to less effective policies and weaker protection for vulnerable groups.  
+
+
+## 2.4 Impact on Statistical Models
+
+Category instability also undermines econometric models that assume time-invariant characteristics such as sex. Two examples illustrate the problem.
+
+### 2.4.1 Fixed Effects Models
+
+In a standard individual fixed-effects model, time-invariant traits such as sex are absorbed into the unit-specific intercept $\alpha_i$ and therefore drop out:
+
+$$
+y_{it} = \alpha_i + \tau_t + \gamma'X_{it} + \varepsilon_{it}.
+$$
+
+Here, $y_{it}$ is the outcome for person $i$ in year $t$, $\tau_t$ are year effects, $X_{it}$ are time-varying covariates, and $\alpha_i$ captures all stable characteristics of individual $i$, including sex. The purpose of the within estimator is to estimate causal effects of time-varying regressors **net of sex and other stable factors**.
+
+If “sex” becomes mutable under self-ID, however, it no longer functions as a stable trait. Instead, it enters the model as a time-varying covariate:
+
+$$
+y_{it} = \alpha_i + \tau_t + \beta\,\text{Female}_{it}^{legal} + \gamma'X_{it} + \varepsilon_{it}.
+$$
+
+In this specification, $\beta$ no longer measures the effect of being biologically female. It captures the effect of switching one’s administrative marker — a fundamentally different parameter, subject to measurement error and endogeneity (e.g., if switching is correlated with shocks in employment or health).
+
+One might argue that the problem could be solved by defining sex at baseline ($\text{Female}_i^{0}$) and then introducing an indicator for whether an individual has switched during the panel ($\text{Switch}_{it}$):
+
+$$
+y_{it} = \alpha_i + \tau_t + \beta\,\text{Female}_i^{0} + \delta\,\text{Switch}_{it} + \gamma'X_{it} + \varepsilon_{it}.
+$$
+
+While statistically feasible, this approach does not resolve the conceptual issues:
+
+1. **Conceptual mismatch.** $\delta$ measures the association between legal reclassification and the outcome, not sex differences. This is not the estimand of interest in official statistics.  
+2. **Endogeneity.** Switching is unlikely to be random and may be correlated with shocks in $y_{it}$, making $\delta$ difficult to interpret.  
+3. **Policy relevance.** Policymakers seek to understand sex-based inequalities; $\delta$ instead captures the consequences of administrative reclassification.
+
+Thus, although baseline stratification and switch indicators can be coded, they shift the estimand away from biology and towards administrative behavior, which is not the purpose of sex-disaggregated analysis.
+
+### 2.4.2 Difference-in-Differences and Event Studies
+
+The same logic applies to Difference-in-Differences (DiD) and event study designs. Typically, one estimates:
+
+$$
+y_{it} = \alpha_i + \tau_t + \theta \,(\text{Female}_i \times \text{Post}_t) + \varepsilon_{it},
+$$
+
+where $\theta$ captures the female–male differential effect of a policy change.
+
+If sex is mutable, group membership becomes unstable. Individuals can enter or leave the “female” group by administrative reclassification, contaminating treatment and control groups. A natural adjustment is to define groups by baseline sex and then include a switch indicator:
+
+$$
+y_{it} = \alpha_i + \tau_t + \theta \,(\text{Female}_i^{0} \times \text{Post}_t) + \delta\,\text{Switch}_{it} + \varepsilon_{it}.
+$$
+
+Here, $\theta$ still represents the policy effect on baseline females relative to baseline males, while $\delta$ captures the effect of switching categories during the observation window.
+
+But as with fixed effects, this patch does not solve the deeper problems:
+
+1. **Conceptual mismatch.** The question DiD is meant to answer is whether a policy narrowed or widened gaps between men and women. With mutable categories, $\delta$ estimates the correlation between switching and outcomes, which is not the same quantity.  
+2. **Endogeneity.** Reclassification may occur precisely in response to the policy (e.g., if incentives differ across categories), violating the parallel trends assumption.  
+3. **Policy relevance.** Policymakers are interested in whether interventions reduce structural inequalities between men and women. If “women” is defined administratively and subject to strategic reclassification, the results cease to reflect those inequalities.
+
+Thus, even with baseline definitions and switch indicators, the estimand changes. What the model delivers is no longer a policy effect on biologically defined groups, but an effect on administratively mutable categories. For official statistics, this undermines both interpretability and policy relevance.
+
+## 2.5 Administrative Data Integration
+
+Modern statistical systems rely heavily on integrating administrative registers such as population registers, vital statistics, health records, education, labor market, and pensions. This integration makes it possible to construct longitudinal life-course data and to derive core demographic indicators. A key assumption in this process is that “sex” is a stable characteristic, much like date of birth, and can therefore be used consistently across domains.
+
+If sex becomes mutable under self-ID, this assumption breaks down in several ways:
+
+- **Different sex entries across registers.** A person may update their marker in the population register but still appear under their biological sex in a health register (e.g., when receiving gynecological care) or in historical education records. When the registers are linked, the same individual may appear as male in one domain and female in another. Analysts are then faced with the question: which record should take precedence?
+
+- **Coherence of life-course trajectories.** Consider an individual who is recorded as female in the health register at the time of giving birth, but as male in the pension register later in life. If we study fertility, employment, and pensions across the life course, the categories no longer line up: the same person’s fertility is counted among women, while their pension accruals are tabulated among men. This undermines the interpretability of longitudinal statistics.
+
+- **Downstream bias in derived indicators.** Many derived indicators (e.g., lifetime earnings gaps, fertility–employment interactions, healthy life expectancy by sex) require consistent categorization over time and across registers. If sex refers to different underlying concepts in different domains—sometimes biology, sometimes self-identification—then the resulting statistics no longer measure what they purport to measure.
+
+
+## 2.6 Policy Monitoring and Legal Obligations
+
+Equality frameworks depend on stable sex categories. Gender pay gap monitoring, pension entitlements, and labor force participation all rely on consistent sex-disaggregated data. Quotas for board representation are another example.  
+
+Some argue that quotas should reflect gender identity rather than sex [@Butler_2004; @Halberstam_2018]. Yet quotas exist to remedy systemic disadvantages women face over their entire careers. A late-in-life male-to-female transition does not erase decades of accumulated male advantage. Counting such individuals toward female quotas undermines both the purpose and legitimacy of such policies.  
+
+## 2.7 International Standards
+
+International statistical standards coordinated by the UN, Eurostat, and OECD require sex as a harmonized demographic variable [@UN_2019; @Eurostat_2021].  
+
+While some argue that such standards will evolve, harmonization only works if concepts remain stable across countries. It is highly unlikely that all national statistical offices—including those in more conservative or Global South contexts—will redefine sex administratively. A unilateral shift to self-ID would isolate a country statistically rather than modernize it.  
+
+## 2.8 Feasibility of Recording Gender Identity
+
+A further challenge is the feasibility of recording gender identity in official statistics. While the categories of “male” and “female” are stable and universally recognized, there is no consensus—even within activist or queer theory circles—on how many genders exist or how they should be defined. Some advocate for a third category (“X”), others for an open-ended approach that recognizes dozens or even infinite genders (e.g., “astrogender,” “catgender”). From the perspective of official statistics, this creates two distinct problems.
+
+First, **conceptual indeterminacy**. International standards depend on clear and stable categories that are comparable across time and across countries. If the number of genders is, in principle, infinite or open-ended, statistical offices cannot produce harmonized demographic series. Without standardization, time trends break down, and cross-national comparability disappears.
+
+Second, **statistical feasibility**. Even if dozens of identity categories were formally recognized in data collection, the resulting cell sizes in official tabulations would be extremely small. Confidentiality rules in official statistics generally prohibit publication of results with very small cell counts. The consequence is that most gender-diverse categories would either be suppressed for disclosure control reasons or would be statistically unreliable. In practice, the result would be a proliferation of categories in collection, but little usable information in publication.
+
+Third, **mismatch across data sources**. Surveys may allow free-text or fine-grained gender categories (e.g., “catgender”), while registers and censuses typically constrain responses to male, female, or at most “X.” As a result, the same person may be recognized as “catgender” in a survey but recorded as “female” in a register. This inconsistency creates two problems: (1) conceptually, the categories do not align across sources, making it difficult to integrate data; and (2) politically, activists may critique official statistics for erasing identities by collapsing them into standardized categories. Either way, the coherence and legitimacy of the data are undermined.
+
+One proposed solution is to add a residual “other” category. Yet this approach introduces its own problems. Activists often critique “other” as an act of *othering*, positioning gender-diverse people as marginal or residual. Alternative wordings such as “another gender (please specify)” or “gender diverse” may reduce this rhetorical problem, but they do not resolve the statistical one: the open-ended nature of the category still yields extremely small cell sizes and unstable comparability. 
+
+Some national statistical agencies have experimented with a third explicit category such as “non-binary” or “X.” This has the advantage of recognition beyond the male–female binary while maintaining a finite number of categories that can be harmonized internationally. Yet even this solution is contested, as not all individuals who reject the binary identify with “non-binary” or “X.” In practice, the recording of detailed gender identities may be better suited to specialized surveys designed to capture the experiences of gender-diverse populations, while censuses, vital statistics, and international reporting require stable, limited, and statistically robust categories.
+
+
+# 3. Constructive Way Forward
+
+The critiques above do not imply that gender identity should be ignored. On the contrary, recording gender identity can provide valuable information for understanding social inequality, discrimination, etc. of gender-diverse populations. The challenge is to incorporate this information without compromising the coherence of demographic and health statistics.
+
+The recommended solution is **dual recording with functional separation of data sources**:
+
+- **Registers, censuses, and vital statistics**: record **sex (biological, binary: male/female)** only. These systems are designed for stable, internationally comparable demographic indicators such as fertility, mortality, and life expectancy. Introducing additional or fluid categories here undermines continuity and feasibility.  
+
+- **Surveys and specialized studies**: record **gender identity (self-declared)** in greater detail, using either a limited set of categories (male, female, non-binary) or free-text responses. These can then be aggregated into broader groups for publication, ensuring both inclusivity and statistical robustness.
+
+This division of labor ensures that the core demographic infrastructure remains stable and internationally comparable, while also allowing for the study of gender diversity in dedicated contexts. It also resolves the mismatch problem: the census and registers consistently measure sex, while surveys capture gender identity. The two datasets serve complementary purposes rather than competing ones.
+
+To avoid rhetorical pitfalls, statistical offices should avoid residual labels such as “other,” which are often criticized as *othering*. Instead, surveys can use terms like “another gender (please specify)” or “gender diverse,” with the understanding that detailed responses may be grouped into broader categories for publication. In registers and censuses, however, stability and comparability must take precedence, which requires retaining the binary categories of male and female.
+
+This approach balances inclusivity with statistical feasibility. It acknowledges the diversity of gender identities while ensuring that core demographic variables remain interpretable and internationally comparable. By recording sex and gender identity separately—and by allocating them to the data sources best suited for each—statistical systems can safeguard both scientific rigor and social recognition.
+
+
+# 4. Conclusion
+
+Sex, defined biologically as male or female on the basis of gametes, remains indispensable for demographic and statistical purposes. Gender identity is socially significant, but conflating the two introduces discontinuities, distorts indicators, biases models, complicates data integration, undermines equality monitoring, and reduces international comparability.  
+
+The central problem is not political but conceptual: many of the most important statistics lose meaning if sex is detached from biology. Fertility rates, maternal mortality ratios, and sex-specific disease incidences are not cultural artifacts but practical tools for forecasting populations, allocating healthcare, and ensuring fiscal sustainability.  
+
+To maintain robust statistics, sex must remain a stable, binary variable, recorded alongside (but not replaced by) gender identity. This approach preserves both scientific rigor and social recognition.  
