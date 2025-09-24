@@ -74,7 +74,7 @@ If sex is redefined as a self-declared category, the underlying concept shifts f
 
 - **Time series comparability:** Longitudinal measures such as fertility, mortality, and life expectancy become non-comparable if the meaning of “male” and “female” changes.  
 
-- **Cross-country comparability:** International statistical systems harmonize sex as a biological variable [@UN_2019; @Eurostat_2021; @OECD_2022]. Divergence reduces comparability.  
+- **Cross-country comparability:** International statistical systems harmonize sex as a biological variable [@UN_2019; @Eurostat_2021]. Divergence reduces comparability. While some argue that such standards will evolve, harmonization only works if concepts remain stable across countries. It is highly unlikely that all national statistical offices—including those in more conservative or Global South contexts—will redefine sex administratively. A unilateral shift to self-ID would isolate a country statistically rather than modernize it.  
 
 - **Category stability:** In Germany, individuals may re-register annually. A person could thus be male in one year, female in the next, and “X” thereafter—an unprecedented source of instability for demographic series.  
 
@@ -176,12 +176,6 @@ If sex becomes mutable under self-ID, this assumption breaks down in several way
 Equality frameworks depend on stable sex categories. Gender pay gap monitoring, pension entitlements, and labor force participation all rely on consistent sex-disaggregated data. Quotas for board representation are another example.  
 
 Some argue that quotas should reflect gender identity rather than sex [@Butler_2004; @Halberstam_2018]. Yet quotas exist to remedy systemic disadvantages women face over their entire careers. A late-in-life male-to-female transition does not erase decades of accumulated male advantage. Counting such individuals toward female quotas undermines both the purpose and legitimacy of such policies.  
-
-## 2.7 International Standards
-
-International statistical standards coordinated by the UN, Eurostat, and OECD require sex as a harmonized demographic variable [@UN_2019; @Eurostat_2021].  
-
-While some argue that such standards will evolve, harmonization only works if concepts remain stable across countries. It is highly unlikely that all national statistical offices—including those in more conservative or Global South contexts—will redefine sex administratively. A unilateral shift to self-ID would isolate a country statistically rather than modernize it.  
 
 ## 2.8 Feasibility of Recording Gender Identity
 
