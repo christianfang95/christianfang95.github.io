@@ -177,7 +177,7 @@ Equality frameworks depend on stable sex categories. Gender pay gap monitoring, 
 
 Some argue that quotas should reflect gender identity rather than sex [@Butler_2004; @Halberstam_2018]. Yet quotas exist to remedy systemic disadvantages women face over their entire careers. A late-in-life male-to-female transition does not erase decades of accumulated male advantage. Counting such individuals toward female quotas undermines both the purpose and legitimacy of such policies.  
 
-## 2.8 Feasibility of Recording Gender Identity
+## 2.7 Feasibility of Recording Gender Identity
 
 A further challenge is the feasibility of recording gender identity in official statistics. While the categories of “male” and “female” are stable and universally recognized, there is no consensus—even within activist or queer theory circles—on how many genders exist or how they should be defined. Some advocate for a third category (“X”), others for an open-ended approach that recognizes dozens or even infinite genders (e.g., “astrogender,” “catgender”). From the perspective of official statistics, this creates two distinct problems.
 
