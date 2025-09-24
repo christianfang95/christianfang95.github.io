@@ -13,9 +13,9 @@ code-fold:
     true
 bibliography: references.bib
 
-image: pop_pyramid.svg
+image: pop_pyramid.png
 resources:
-  - pop_pyramid.svg
+  - pop_pyramid.png
 ---
 
 *Note: This article reflects my personal opinions, not those of my employer.*  
