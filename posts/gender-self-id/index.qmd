@@ -16,6 +16,11 @@ bibliography: references.bib
 image: pop_pyramid.png
 resources:
   - pop_pyramid.png
+open-graph:
+  image: pop_pyramid.png
+twitter-card:
+  image: pop_pyramid.png
+  card: summary_large_image
 ---
 
 *Note: This article reflects my personal opinions, not those of my employer.*  
