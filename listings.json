@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/gender-self-id/index.html",
       "/posts/simulations/index.html",
       "/posts/marginally-significant/index.html",
       "/posts/mlpm/index.html",

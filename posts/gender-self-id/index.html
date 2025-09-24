@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Christian Fang">
+<meta name="dcterms.date" content="2025-09-24">
+<meta name="description" content="Gender self-ID may affirm individual identities, but undermines the interpretability of sex-disaggregated statistics that are indispensable for demographic forecasting, healthcare planning, and equality monitoring.">
+
+<title>Let’s Talk About Sex (and Demography) – Christian Fang</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15ea27bac76f9890c21e80949f497921.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8143d892e0ed555d9c4932a0b7ddc6cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Let’s Talk About Sex (and Demography) – Christian Fang">
+<meta property="og:description" content="Gender self-ID may affirm individual identities, but undermines the interpretability of sex-disaggregated statistics that are indispensable for demographic forecasting, healthcare planning, and equality monitoring.">
+<meta property="og:image" content="https://www.christianfang.eu/posts/gender-self-id/pop_pyramid.svg">
+<meta property="og:site_name" content="Christian Fang">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christian Fang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/christianfang95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/fangchris95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://scholar.google.de/citations?user=FePrRkEAAAAJ" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bank2"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Let’s Talk About Sex (and Demography)</h1>
+                  <div>
+        <div class="description">
+          Gender self-ID may affirm individual identities, but undermines the interpretability of sex-disaggregated statistics that are indispensable for demographic forecasting, healthcare planning, and equality monitoring.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">demography</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Christian Fang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 24, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#conceptual-foundations" id="toc-conceptual-foundations" class="nav-link active" data-scroll-target="#conceptual-foundations">1. Conceptual Foundations</a>
+  <ul>
+  <li><a href="#sex" id="toc-sex" class="nav-link" data-scroll-target="#sex">1.1 Sex</a></li>
+  <li><a href="#gender-and-self-id" id="toc-gender-and-self-id" class="nav-link" data-scroll-target="#gender-and-self-id">1.2 Gender and Self-ID</a></li>
+  <li><a href="#from-rare-exceptions-to-systemic-instability" id="toc-from-rare-exceptions-to-systemic-instability" class="nav-link" data-scroll-target="#from-rare-exceptions-to-systemic-instability">1.3 From Rare Exceptions to Systemic Instability</a></li>
+  </ul></li>
+  <li><a href="#consequences-for-official-statistics" id="toc-consequences-for-official-statistics" class="nav-link" data-scroll-target="#consequences-for-official-statistics">2. Consequences for Official Statistics</a>
+  <ul>
+  <li><a href="#loss-of-semantic-coherence" id="toc-loss-of-semantic-coherence" class="nav-link" data-scroll-target="#loss-of-semantic-coherence">2.1 Loss of Semantic Coherence</a>
+  <ul class="collapse">
+  <li><a href="#fertility-and-the-female-sex-class" id="toc-fertility-and-the-female-sex-class" class="nav-link" data-scroll-target="#fertility-and-the-female-sex-class">2.1.1 Fertility and the Female Sex Class</a></li>
+  <li><a href="#fertility-family-diversity-and-forecasting" id="toc-fertility-family-diversity-and-forecasting" class="nav-link" data-scroll-target="#fertility-family-diversity-and-forecasting">2.1.2 Fertility, Family Diversity, and Forecasting</a></li>
+  <li><a href="#implications-for-planning" id="toc-implications-for-planning" class="nav-link" data-scroll-target="#implications-for-planning">2.1.3 Implications for Planning</a></li>
+  </ul></li>
+  <li><a href="#break-in-statistical-continuity" id="toc-break-in-statistical-continuity" class="nav-link" data-scroll-target="#break-in-statistical-continuity">2.2 Break in Statistical Continuity</a></li>
+  <li><a href="#distortion-of-core-indicators" id="toc-distortion-of-core-indicators" class="nav-link" data-scroll-target="#distortion-of-core-indicators">2.3 Distortion of Core Indicators</a></li>
+  <li><a href="#impact-on-statistical-models" id="toc-impact-on-statistical-models" class="nav-link" data-scroll-target="#impact-on-statistical-models">2.4 Impact on Statistical Models</a>
+  <ul class="collapse">
+  <li><a href="#fixed-effects-models" id="toc-fixed-effects-models" class="nav-link" data-scroll-target="#fixed-effects-models">2.4.1 Fixed Effects Models</a></li>
+  <li><a href="#difference-in-differences-and-event-studies" id="toc-difference-in-differences-and-event-studies" class="nav-link" data-scroll-target="#difference-in-differences-and-event-studies">2.4.2 Difference-in-Differences and Event Studies</a></li>
+  </ul></li>
+  <li><a href="#administrative-data-integration" id="toc-administrative-data-integration" class="nav-link" data-scroll-target="#administrative-data-integration">2.5 Administrative Data Integration</a></li>
+  <li><a href="#policy-monitoring-and-legal-obligations" id="toc-policy-monitoring-and-legal-obligations" class="nav-link" data-scroll-target="#policy-monitoring-and-legal-obligations">2.6 Policy Monitoring and Legal Obligations</a></li>
+  <li><a href="#international-standards" id="toc-international-standards" class="nav-link" data-scroll-target="#international-standards">2.7 International Standards</a></li>
+  <li><a href="#feasibility-of-recording-gender-identity" id="toc-feasibility-of-recording-gender-identity" class="nav-link" data-scroll-target="#feasibility-of-recording-gender-identity">2.8 Feasibility of Recording Gender Identity</a></li>
+  </ul></li>
+  <li><a href="#constructive-way-forward" id="toc-constructive-way-forward" class="nav-link" data-scroll-target="#constructive-way-forward">3. Constructive Way Forward</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">4. Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><em>Note: This article reflects my personal opinions, not those of my employer.</em></p>
+<p>Germany introduced its gender self-identification act (Selbstbestimmungsgesetz) in late 2024. The law allows individuals to change their sex marker once per year through a simple declaration at the local courthouse. The Netherlands planned a similar legal change, though the draft was retracted due to lack of support in the current parliament. The stated intention is to respect and affirm individuals’ gender identities. However, from the perspective of official statistics and demography, such reforms introduce substantial challenges.</p>
+<p>Sex-disaggregated data form the foundation of demographic analysis, fertility and mortality statistics, healthcare planning, labor market monitoring, and international comparability. If “sex” is redefined as a mutable and subjective administrative category, these statistics risk losing their meaning altogether. The core concern is not ideological but conceptual: many of the most important demographic and health indicators are meaningful only if sex reflects biology. If this link is severed, statistics become uninterpretable, forecasts unreliable, and policy decisions distorted.</p>
+<section id="conceptual-foundations" class="level1">
+<h1>1. Conceptual Foundations</h1>
+<section id="sex" class="level2">
+<h2 class="anchored" data-anchor-id="sex">1.1 Sex</h2>
+<p>In biology, sex is defined by the reproductive role of an organism—specifically, the type of gamete it produces (or is organized to produce). Males produce small gametes (sperm), while females produce large gametes (ova). This anisogamy-based definition applies universally to mammals, including humans, and establishes sex as a binary trait <span class="citation" data-cites="bhargava2021considering Dawkins_1976">(<a href="#ref-bhargava2021considering" role="doc-biblioref">Bhargava et al. 2021</a>; <a href="#ref-Dawkins_1976" role="doc-biblioref">Dawkins 1976</a>)</span>.</p>
+<p>Critics often argue that such a definition “erases” intersex individuals, framing them as evidence of a spectrum rather than a binary <span class="citation" data-cites="FaustoSterling_1993 FaustoSterling_2000">(<a href="#ref-FaustoSterling_1993" role="doc-biblioref">Fausto-Sterling 1993</a>, <a href="#ref-FaustoSterling_2000" role="doc-biblioref">2000</a>)</span>. Yet biological consensus is clear: intersex conditions represent variations within the male–female binary, not a third reproductive class. While some individuals have atypical chromosomal, hormonal, or anatomical features, every known human falls within the framework of male or female. No documented case exists of a person simultaneously producing both viable sperm and ova <span class="citation" data-cites="Sax_2002">(<a href="#ref-Sax_2002" role="doc-biblioref">Sax 2002</a>)</span>. For statistical purposes, sex can therefore be consistently operationalized as a binary variable, even if clinical expertise is sometimes required to record it.</p>
+</section>
+<section id="gender-and-self-id" class="level2">
+<h2 class="anchored" data-anchor-id="gender-and-self-id">1.2 Gender and Self-ID</h2>
+<p>By contrast, “gender” typically refers to an individual’s internal sense of identity and social role, which may or may not align with biological sex <span class="citation" data-cites="West_Zimmerman_1987 Butler_1990">(<a href="#ref-West_Zimmerman_1987" role="doc-biblioref">West and Zimmerman 1987</a>; <a href="#ref-Butler_1990" role="doc-biblioref">Butler 1990</a>)</span>. Queer and trans theorists argue that gender is socially constructed, fluid, and historically contingent <span class="citation" data-cites="Spade_2011 Halberstam_2005">(<a href="#ref-Spade_2011" role="doc-biblioref">Spade 2011</a>; <a href="#ref-Halberstam_2005" role="doc-biblioref">Judith Halberstam 2005</a>)</span>.</p>
+<p>Self-identification policies operationalize this view by allowing individuals to change their legal sex marker based solely on self-declaration, without medical or psychological evaluation. Historically, legal recognition of a sex change required lengthy medical and legal procedures, reflecting what Dean Spade calls the “administrative violence” of gatekeeping <span class="citation" data-cites="Spade_2011">(<a href="#ref-Spade_2011" role="doc-biblioref">Spade 2011</a>)</span>. Under self-ID, this requirement is removed, and the sex marker becomes a reflection of personal declaration rather than biological reality.</p>
+</section>
+<section id="from-rare-exceptions-to-systemic-instability" class="level2">
+<h2 class="anchored" data-anchor-id="from-rare-exceptions-to-systemic-instability">1.3 From Rare Exceptions to Systemic Instability</h2>
+<p>Even under the previous medical/legal regime, the demographic categories of male or female were not perfectly “pure.” Individuals who successfully transitioned legally were reclassified in registers, creating some distortion of male and female categories. But because such cases were rare—limited to those who underwent extensive medical and legal procedures—the statistical impact was contained.</p>
+<p>Self-ID fundamentally alters this balance. What was once rare and exceptional becomes administratively simple and potentially widespread. Survey evidence from the Netherlands suggests that nearly one million people—around 6% of the adult population—would consider registering an “X” marker under a self-ID regime <span class="citation" data-cites="Rutgers_2023">(<a href="#ref-Rutgers_2023" role="doc-biblioref">Rutgers 2023</a>)</span>. This is not a marginal distortion but a systemic break in statistical continuity.</p>
+</section>
+</section>
+<section id="consequences-for-official-statistics" class="level1">
+<h1>2. Consequences for Official Statistics</h1>
+<section id="loss-of-semantic-coherence" class="level2">
+<h2 class="anchored" data-anchor-id="loss-of-semantic-coherence">2.1 Loss of Semantic Coherence</h2>
+<p>The most immediate consequence of self-ID regimes is that certain statistics lose their substantive meaning. If legal sex replaces biological sex in administrative data, categories such as “male fertility” or “non-binary fertility” will appear. These are conceptually incoherent from a demographic perspective, because fertility and mortality processes are tied to reproductive biology, not self-declared identity.</p>
+<section id="fertility-and-the-female-sex-class" class="level3">
+<h3 class="anchored" data-anchor-id="fertility-and-the-female-sex-class">2.1.1 Fertility and the Female Sex Class</h3>
+<p>Formally, consider the total fertility rate (TFR): <span class="math display">
+\text{TFR} = \sum_a \frac{B_a}{W_a} \cdot k,
+</span></p>
+<p>where <span class="math inline">B_a</span> is the number of births to women of age <span class="math inline">a</span>, <span class="math inline">W_a</span> is the number of women of age <span class="math inline">a</span>, and <span class="math inline">k</span> is a scaling constant (usually 5 for 5-year age groups). The denominator <span class="math inline">W_a</span> is meaningful only if “women” refers to individuals biologically capable of childbearing (i.e., females with a uterus).</p>
+<p>If the denominator includes males who are legally reclassified as female, it introduces individuals who are categorically incapable of pregnancy. If, conversely, biologically female individuals are recorded as male or non-binary, their births inflate the numerator but not the denominator. In both cases, the statistic ceases to measure what it was designed to measure: female fertility.</p>
+<p>It is sometimes argued that fertility statistics are already flawed because not all women can give birth. Yet demographic indicators operate at the group level, not the individual level. The TFR does not assume that every woman will reproduce, but that fertility is restricted to the female sex class. Including infertile or post-reproductive women is not an error but part of the design: the measure captures the average number of births per woman, given the distribution of fertility across the population. This is conceptually distinct from including males, who are never members of the reproductive sex class.</p>
+</section>
+<section id="fertility-family-diversity-and-forecasting" class="level3">
+<h3 class="anchored" data-anchor-id="fertility-family-diversity-and-forecasting">2.1.2 Fertility, Family Diversity, and Forecasting</h3>
+<p>Another critique is that fertility measures reinforce heteronormative assumptions, especially since same-sex couples can also become parents <span class="citation" data-cites="Valentine_2007">(<a href="#ref-Valentine_2007" role="doc-biblioref">Valentine 2007</a>)</span>. This, however, confuses athways to parenthood with fertility as a biological process. Adoption, step-parenthood, and surrogacy are important social realities, but they do not change the fact that every birth requires a uterus. The very existence of surrogacy debates highlights this: male couples can only become biological parents through the involvement of a female gestational surrogate. Fertility rates therefore remain indispensable as measures of biological reproduction and population replacement.</p>
+<p>Forecasting also does not assume heterosexual, monogamous marriages. It tracks births and cohort sizes, not family forms. Whether a child is raised by heterosexual parents, same-sex parents, or a single parent is irrelevant for the measure itself. What matters is the number of children born, because this determines future school enrollments, labor supply, and pension obligations. Family structure can—and should—be studied in its own right, but it is not a substitute for fertility as a demographic variable.</p>
+</section>
+<section id="implications-for-planning" class="level3">
+<h3 class="anchored" data-anchor-id="implications-for-planning">2.1.3 Implications for Planning</h3>
+<p>The importance of fertility statistics is not abstract. They underpin population forecasts, which guide planning for schools, housing, pensions, and healthcare capacity <span class="citation" data-cites="Lutz_Sanderson_Scherbov_2001">(<a href="#ref-Lutz_Sanderson_Scherbov_2001" role="doc-biblioref">Lutz, Sanderson, and Scherbov 2001</a>)</span>. If fertility rates are distorted or rendered uninterpretable, projections of the working-age population, dependency ratios, and fiscal sustainability all become unreliable. Governments would effectively be forced to plan blind. Fertility statistics are therefore not relics of a “cis-heteronormative worldview,” but practical instruments of governance.</p>
+</section>
+</section>
+<section id="break-in-statistical-continuity" class="level2">
+<h2 class="anchored" data-anchor-id="break-in-statistical-continuity">2.2 Break in Statistical Continuity</h2>
+<p>If sex is redefined as a self-declared category, the underlying concept shifts from a stable biological attribute to a fluid social identity. This undermines:</p>
+<ul>
+<li><p><strong>Time series comparability:</strong> Longitudinal measures such as fertility, mortality, and life expectancy become non-comparable if the meaning of “male” and “female” changes.</p></li>
+<li><p><strong>Cross-country comparability:</strong> International statistical systems harmonize sex as a biological variable <span class="citation" data-cites="UN_2019 Eurostat_2021 OECD_2022">(<a href="#ref-UN_2019" role="doc-biblioref">United Nations 2019</a>; <a href="#ref-Eurostat_2021" role="doc-biblioref">Eurostat 2015</a>; <a href="#ref-OECD_2022" role="doc-biblioref">OECD 2022</a>)</span>. Divergence reduces comparability.</p></li>
+<li><p><strong>Category stability:</strong> In Germany, individuals may re-register annually. A person could thus be male in one year, female in the next, and “X” thereafter—an unprecedented source of instability for demographic series.</p></li>
+</ul>
+</section>
+<section id="distortion-of-core-indicators" class="level2">
+<h2 class="anchored" data-anchor-id="distortion-of-core-indicators">2.3 Distortion of Core Indicators</h2>
+<p>In healthcare, many conditions are sex-specific (e.g., prostate cancer, cervical cancer). Consider cervical cancer incidence:</p>
+<p><span class="math display">
+I = \frac{C}{F}
+</span></p>
+<p>where <span class="math inline">C</span> is the number of cases and <span class="math inline">F</span> is the number of females at risk. If the denominator includes legally female but biologically male individuals (who lack cervices), the rate is downwardly biased. If biologically female individuals are legally recorded as male or non-binary, the rate is upwardly biased.</p>
+<p>These statistics are not merely descriptive. They are used to plan how many gynecologists, obstetricians, and oncologists a healthcare system requires. Biologically male populations will never need obstetric care; biologically female populations will. If denominators are blurred, health systems risk under- or over-provision of essential services, directly affecting patient outcomes.</p>
+<p>It is sometimes argued that sex-specific categories exclude transgender and non-binary patients <span class="citation" data-cites="Feder_2022">(<a href="#ref-Feder_2022" role="doc-biblioref">Feder 2022</a>)</span>. But allocation must follow biological risk: biologically male patients are at risk of prostate cancer; biologically female patients of cervical cancer. Without this clarity, prevention and treatment misallocate scarce resources, harming patients.</p>
+<p>Crime statistics face similar challenges. Some argue that disaggregating crime by sex reinforces stereotypes of men as violent and women as victims. Yet criminology consistently finds stark sex differences in offending. Recognizing these patterns is essential for effective prevention—for example, interventions targeted at male youth violence. Replacing biological sex with legal sex obscures these differences, leading to less effective policies and weaker protection for vulnerable groups.</p>
+</section>
+<section id="impact-on-statistical-models" class="level2">
+<h2 class="anchored" data-anchor-id="impact-on-statistical-models">2.4 Impact on Statistical Models</h2>
+<p>Category instability also undermines econometric models that assume time-invariant characteristics such as sex. Two examples illustrate the problem.</p>
+<section id="fixed-effects-models" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects-models">2.4.1 Fixed Effects Models</h3>
+<p>In a standard individual fixed-effects model, time-invariant traits such as sex are absorbed into the unit-specific intercept <span class="math inline">\alpha_i</span> and therefore drop out:</p>
+<p><span class="math display">
+y_{it} = \alpha_i + \tau_t + \gamma'X_{it} + \varepsilon_{it}.
+</span></p>
+<p>Here, <span class="math inline">y_{it}</span> is the outcome for person <span class="math inline">i</span> in year <span class="math inline">t</span>, <span class="math inline">\tau_t</span> are year effects, <span class="math inline">X_{it}</span> are time-varying covariates, and <span class="math inline">\alpha_i</span> captures all stable characteristics of individual <span class="math inline">i</span>, including sex. The purpose of the within estimator is to estimate causal effects of time-varying regressors <strong>net of sex and other stable factors</strong>.</p>
+<p>If “sex” becomes mutable under self-ID, however, it no longer functions as a stable trait. Instead, it enters the model as a time-varying covariate:</p>
+<p><span class="math display">
+y_{it} = \alpha_i + \tau_t + \beta\,\text{Female}_{it}^{legal} + \gamma'X_{it} + \varepsilon_{it}.
+</span></p>
+<p>In this specification, <span class="math inline">\beta</span> no longer measures the effect of being biologically female. It captures the effect of switching one’s administrative marker — a fundamentally different parameter, subject to measurement error and endogeneity (e.g., if switching is correlated with shocks in employment or health).</p>
+<p>One might argue that the problem could be solved by defining sex at baseline (<span class="math inline">\text{Female}_i^{0}</span>) and then introducing an indicator for whether an individual has switched during the panel (<span class="math inline">\text{Switch}_{it}</span>):</p>
+<p><span class="math display">
+y_{it} = \alpha_i + \tau_t + \beta\,\text{Female}_i^{0} + \delta\,\text{Switch}_{it} + \gamma'X_{it} + \varepsilon_{it}.
+</span></p>
+<p>While statistically feasible, this approach does not resolve the conceptual issues:</p>
+<ol type="1">
+<li><strong>Conceptual mismatch.</strong> <span class="math inline">\delta</span> measures the association between legal reclassification and the outcome, not sex differences. This is not the estimand of interest in official statistics.<br>
+</li>
+<li><strong>Endogeneity.</strong> Switching is unlikely to be random and may be correlated with shocks in <span class="math inline">y_{it}</span>, making <span class="math inline">\delta</span> difficult to interpret.<br>
+</li>
+<li><strong>Policy relevance.</strong> Policymakers seek to understand sex-based inequalities; <span class="math inline">\delta</span> instead captures the consequences of administrative reclassification.</li>
+</ol>
+<p>Thus, although baseline stratification and switch indicators can be coded, they shift the estimand away from biology and towards administrative behavior, which is not the purpose of sex-disaggregated analysis.</p>
+</section>
+<section id="difference-in-differences-and-event-studies" class="level3">
+<h3 class="anchored" data-anchor-id="difference-in-differences-and-event-studies">2.4.2 Difference-in-Differences and Event Studies</h3>
+<p>The same logic applies to Difference-in-Differences (DiD) and event study designs. Typically, one estimates:</p>
+<p><span class="math display">
+y_{it} = \alpha_i + \tau_t + \theta \,(\text{Female}_i \times \text{Post}_t) + \varepsilon_{it},
+</span></p>
+<p>where <span class="math inline">\theta</span> captures the female–male differential effect of a policy change.</p>
+<p>If sex is mutable, group membership becomes unstable. Individuals can enter or leave the “female” group by administrative reclassification, contaminating treatment and control groups. A natural adjustment is to define groups by baseline sex and then include a switch indicator:</p>
+<p><span class="math display">
+y_{it} = \alpha_i + \tau_t + \theta \,(\text{Female}_i^{0} \times \text{Post}_t) + \delta\,\text{Switch}_{it} + \varepsilon_{it}.
+</span></p>
+<p>Here, <span class="math inline">\theta</span> still represents the policy effect on baseline females relative to baseline males, while <span class="math inline">\delta</span> captures the effect of switching categories during the observation window.</p>
+<p>But as with fixed effects, this patch does not solve the deeper problems:</p>
+<ol type="1">
+<li><strong>Conceptual mismatch.</strong> The question DiD is meant to answer is whether a policy narrowed or widened gaps between men and women. With mutable categories, <span class="math inline">\delta</span> estimates the correlation between switching and outcomes, which is not the same quantity.<br>
+</li>
+<li><strong>Endogeneity.</strong> Reclassification may occur precisely in response to the policy (e.g., if incentives differ across categories), violating the parallel trends assumption.<br>
+</li>
+<li><strong>Policy relevance.</strong> Policymakers are interested in whether interventions reduce structural inequalities between men and women. If “women” is defined administratively and subject to strategic reclassification, the results cease to reflect those inequalities.</li>
+</ol>
+<p>Thus, even with baseline definitions and switch indicators, the estimand changes. What the model delivers is no longer a policy effect on biologically defined groups, but an effect on administratively mutable categories. For official statistics, this undermines both interpretability and policy relevance.</p>
+</section>
+</section>
+<section id="administrative-data-integration" class="level2">
+<h2 class="anchored" data-anchor-id="administrative-data-integration">2.5 Administrative Data Integration</h2>
+<p>Modern statistical systems rely heavily on integrating administrative registers such as population registers, vital statistics, health records, education, labor market, and pensions. This integration makes it possible to construct longitudinal life-course data and to derive core demographic indicators. A key assumption in this process is that “sex” is a stable characteristic, much like date of birth, and can therefore be used consistently across domains.</p>
+<p>If sex becomes mutable under self-ID, this assumption breaks down in several ways:</p>
+<ul>
+<li><p><strong>Different sex entries across registers.</strong> A person may update their marker in the population register but still appear under their biological sex in a health register (e.g., when receiving gynecological care) or in historical education records. When the registers are linked, the same individual may appear as male in one domain and female in another. Analysts are then faced with the question: which record should take precedence?</p></li>
+<li><p><strong>Coherence of life-course trajectories.</strong> Consider an individual who is recorded as female in the health register at the time of giving birth, but as male in the pension register later in life. If we study fertility, employment, and pensions across the life course, the categories no longer line up: the same person’s fertility is counted among women, while their pension accruals are tabulated among men. This undermines the interpretability of longitudinal statistics.</p></li>
+<li><p><strong>Downstream bias in derived indicators.</strong> Many derived indicators (e.g., lifetime earnings gaps, fertility–employment interactions, healthy life expectancy by sex) require consistent categorization over time and across registers. If sex refers to different underlying concepts in different domains—sometimes biology, sometimes self-identification—then the resulting statistics no longer measure what they purport to measure.</p></li>
+</ul>
+</section>
+<section id="policy-monitoring-and-legal-obligations" class="level2">
+<h2 class="anchored" data-anchor-id="policy-monitoring-and-legal-obligations">2.6 Policy Monitoring and Legal Obligations</h2>
+<p>Equality frameworks depend on stable sex categories. Gender pay gap monitoring, pension entitlements, and labor force participation all rely on consistent sex-disaggregated data. Quotas for board representation are another example.</p>
+<p>Some argue that quotas should reflect gender identity rather than sex <span class="citation" data-cites="Butler_2004 Halberstam_2018">(<a href="#ref-Butler_2004" role="doc-biblioref">Butler 2004</a>; <a href="#ref-Halberstam_2018" role="doc-biblioref">Jack Halberstam 2018</a>)</span>. Yet quotas exist to remedy systemic disadvantages women face over their entire careers. A late-in-life male-to-female transition does not erase decades of accumulated male advantage. Counting such individuals toward female quotas undermines both the purpose and legitimacy of such policies.</p>
+</section>
+<section id="international-standards" class="level2">
+<h2 class="anchored" data-anchor-id="international-standards">2.7 International Standards</h2>
+<p>International statistical standards coordinated by the UN, Eurostat, and OECD require sex as a harmonized demographic variable <span class="citation" data-cites="UN_2019 Eurostat_2021">(<a href="#ref-UN_2019" role="doc-biblioref">United Nations 2019</a>; <a href="#ref-Eurostat_2021" role="doc-biblioref">Eurostat 2015</a>)</span>.</p>
+<p>While some argue that such standards will evolve, harmonization only works if concepts remain stable across countries. It is highly unlikely that all national statistical offices—including those in more conservative or Global South contexts—will redefine sex administratively. A unilateral shift to self-ID would isolate a country statistically rather than modernize it.</p>
+</section>
+<section id="feasibility-of-recording-gender-identity" class="level2">
+<h2 class="anchored" data-anchor-id="feasibility-of-recording-gender-identity">2.8 Feasibility of Recording Gender Identity</h2>
+<p>A further challenge is the feasibility of recording gender identity in official statistics. While the categories of “male” and “female” are stable and universally recognized, there is no consensus—even within activist or queer theory circles—on how many genders exist or how they should be defined. Some advocate for a third category (“X”), others for an open-ended approach that recognizes dozens or even infinite genders (e.g., “astrogender,” “catgender”). From the perspective of official statistics, this creates two distinct problems.</p>
+<p>First, <strong>conceptual indeterminacy</strong>. International standards depend on clear and stable categories that are comparable across time and across countries. If the number of genders is, in principle, infinite or open-ended, statistical offices cannot produce harmonized demographic series. Without standardization, time trends break down, and cross-national comparability disappears.</p>
+<p>Second, <strong>statistical feasibility</strong>. Even if dozens of identity categories were formally recognized in data collection, the resulting cell sizes in official tabulations would be extremely small. Confidentiality rules in official statistics generally prohibit publication of results with very small cell counts. The consequence is that most gender-diverse categories would either be suppressed for disclosure control reasons or would be statistically unreliable. In practice, the result would be a proliferation of categories in collection, but little usable information in publication.</p>
+<p>Third, <strong>mismatch across data sources</strong>. Surveys may allow free-text or fine-grained gender categories (e.g., “catgender”), while registers and censuses typically constrain responses to male, female, or at most “X.” As a result, the same person may be recognized as “catgender” in a survey but recorded as “female” in a register. This inconsistency creates two problems: (1) conceptually, the categories do not align across sources, making it difficult to integrate data; and (2) politically, activists may critique official statistics for erasing identities by collapsing them into standardized categories. Either way, the coherence and legitimacy of the data are undermined.</p>
+<p>One proposed solution is to add a residual “other” category. Yet this approach introduces its own problems. Activists often critique “other” as an act of <em>othering</em>, positioning gender-diverse people as marginal or residual. Alternative wordings such as “another gender (please specify)” or “gender diverse” may reduce this rhetorical problem, but they do not resolve the statistical one: the open-ended nature of the category still yields extremely small cell sizes and unstable comparability.</p>
+<p>Some national statistical agencies have experimented with a third explicit category such as “non-binary” or “X.” This has the advantage of recognition beyond the male–female binary while maintaining a finite number of categories that can be harmonized internationally. Yet even this solution is contested, as not all individuals who reject the binary identify with “non-binary” or “X.” In practice, the recording of detailed gender identities may be better suited to specialized surveys designed to capture the experiences of gender-diverse populations, while censuses, vital statistics, and international reporting require stable, limited, and statistically robust categories.</p>
+</section>
+</section>
+<section id="constructive-way-forward" class="level1">
+<h1>3. Constructive Way Forward</h1>
+<p>The critiques above do not imply that gender identity should be ignored. On the contrary, recording gender identity can provide valuable information for understanding social inequality, discrimination, etc. of gender-diverse populations. The challenge is to incorporate this information without compromising the coherence of demographic and health statistics.</p>
+<p>The recommended solution is <strong>dual recording with functional separation of data sources</strong>:</p>
+<ul>
+<li><p><strong>Registers, censuses, and vital statistics</strong>: record <strong>sex (biological, binary: male/female)</strong> only. These systems are designed for stable, internationally comparable demographic indicators such as fertility, mortality, and life expectancy. Introducing additional or fluid categories here undermines continuity and feasibility.</p></li>
+<li><p><strong>Surveys and specialized studies</strong>: record <strong>gender identity (self-declared)</strong> in greater detail, using either a limited set of categories (male, female, non-binary) or free-text responses. These can then be aggregated into broader groups for publication, ensuring both inclusivity and statistical robustness.</p></li>
+</ul>
+<p>This division of labor ensures that the core demographic infrastructure remains stable and internationally comparable, while also allowing for the study of gender diversity in dedicated contexts. It also resolves the mismatch problem: the census and registers consistently measure sex, while surveys capture gender identity. The two datasets serve complementary purposes rather than competing ones.</p>
+<p>To avoid rhetorical pitfalls, statistical offices should avoid residual labels such as “other,” which are often criticized as <em>othering</em>. Instead, surveys can use terms like “another gender (please specify)” or “gender diverse,” with the understanding that detailed responses may be grouped into broader categories for publication. In registers and censuses, however, stability and comparability must take precedence, which requires retaining the binary categories of male and female.</p>
+<p>This approach balances inclusivity with statistical feasibility. It acknowledges the diversity of gender identities while ensuring that core demographic variables remain interpretable and internationally comparable. By recording sex and gender identity separately—and by allocating them to the data sources best suited for each—statistical systems can safeguard both scientific rigor and social recognition.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>4. Conclusion</h1>
+<p>Sex, defined biologically as male or female on the basis of gametes, remains indispensable for demographic and statistical purposes. Gender identity is socially significant, but conflating the two introduces discontinuities, distorts indicators, biases models, complicates data integration, undermines equality monitoring, and reduces international comparability.</p>
+<p>The central problem is not political but conceptual: many of the most important statistics lose meaning if sex is detached from biology. Fertility rates, maternal mortality ratios, and sex-specific disease incidences are not cultural artifacts but practical tools for forecasting populations, allocating healthcare, and ensuring fiscal sustainability.</p>
+<p>To maintain robust statistics, sex must remain a stable, binary variable, recorded alongside (but not replaced by) gender identity. This approach preserves both scientific rigor and social recognition.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bhargava2021considering" class="csl-entry" role="listitem">
+Bhargava, Aditi, Arthur P Arnold, Debra A Bangasser, Kate M Denton, Arpana Gupta, Lucinda M Hilliard Krause, Emeran A Mayer, et al. 2021. <span>“Considering Sex as a Biological Variable in Basic and Clinical Studies: An Endocrine Society Scientific Statement.”</span> <em>Endocrine Reviews</em> 42 (3): 219–58.
+</div>
+<div id="ref-Butler_1990" class="csl-entry" role="listitem">
+Butler, Judith. 1990. <em>Gender Trouble: Feminism and the Subversion of Identity</em>. New York: Routledge.
+</div>
+<div id="ref-Butler_2004" class="csl-entry" role="listitem">
+———. 2004. <em>Undoing Gender</em>. New York: Routledge.
+</div>
+<div id="ref-Dawkins_1976" class="csl-entry" role="listitem">
+Dawkins, Richard. 1976. <em>The Selfish Gene</em>. Oxford: Oxford University Press.
+</div>
+<div id="ref-Eurostat_2021" class="csl-entry" role="listitem">
+Eurostat. 2015. <em>A Review of Definitions and Methods of Collection in 44 European Countries</em>. Luxembourg: Publications Office of the European Union.
+</div>
+<div id="ref-FaustoSterling_1993" class="csl-entry" role="listitem">
+Fausto-Sterling, Anne. 1993. <span>“The Five Sexes: Why Male and Female Are Not Enough.”</span> <em>The Sciences</em> 33 (2): 20–24. <a href="https://doi.org/10.1002/j.2326-1951.1993.tb03081.x">https://doi.org/10.1002/j.2326-1951.1993.tb03081.x</a>.
+</div>
+<div id="ref-FaustoSterling_2000" class="csl-entry" role="listitem">
+———. 2000. <em>Sexing the Body: Gender Politics and the Construction of Sexuality</em>. New York: Basic Books.
+</div>
+<div id="ref-Feder_2022" class="csl-entry" role="listitem">
+Feder, Ellen K. 2022. <span>“Making Sense of Intersex: Changing Ethical Perspectives in Biomedicine.”</span> <em>Perspectives in Biology and Medicine</em> 65 (1): 48–65. <a href="https://doi.org/10.1353/pbm.2022.0004">https://doi.org/10.1353/pbm.2022.0004</a>.
+</div>
+<div id="ref-Halberstam_2018" class="csl-entry" role="listitem">
+Halberstam, Jack. 2018. <em>Trans*: A Quick and Quirky Account of Gender Variability</em>. Berkeley: University of California Press.
+</div>
+<div id="ref-Halberstam_2005" class="csl-entry" role="listitem">
+Halberstam, Judith. 2005. <em>In a Queer Time and Place: Transgender Bodies, Subcultural Lives</em>. New York: NYU Press.
+</div>
+<div id="ref-Lutz_Sanderson_Scherbov_2001" class="csl-entry" role="listitem">
+Lutz, Wolfgang, Warren Sanderson, and Sergei Scherbov. 2001. <span>“The End of World Population Growth.”</span> <em>Nature</em> 412 (6846): 543–45. <a href="https://doi.org/10.1038/35087589">https://doi.org/10.1038/35087589</a>.
+</div>
+<div id="ref-OECD_2022" class="csl-entry" role="listitem">
+OECD. 2022. <em>OECD Guidelines for Measuring Demographic and Social Data</em>. Paris: Organisation for Economic Co-operation; Development.
+</div>
+<div id="ref-Rutgers_2023" class="csl-entry" role="listitem">
+Rutgers. 2023. <span>“Bijna Een Miljoen Nederlanders Overweegt Non-Binaire Geslachtsregistratie via Gemeentehuis.”</span> 2023. <a href="https://rutgers.nl/nieuws/bijna-een-miljoen-nederlanders-overweegt-non-binaire-geslachtsregistratie-via-gemeentehuis/">https://rutgers.nl/nieuws/bijna-een-miljoen-nederlanders-overweegt-non-binaire-geslachtsregistratie-via-gemeentehuis/</a>.
+</div>
+<div id="ref-Sax_2002" class="csl-entry" role="listitem">
+Sax, Leonard. 2002. <span>“How Common Is Intersex? A Response to Anne Fausto-Sterling.”</span> <em>Journal of Sex Research</em> 39 (3): 174–78. <a href="https://doi.org/10.1080/00224490209552139">https://doi.org/10.1080/00224490209552139</a>.
+</div>
+<div id="ref-Spade_2011" class="csl-entry" role="listitem">
+Spade, Dean. 2011. <em>Normal Life: Administrative Violence, Critical Trans Politics, and the Limits of Law</em>. Brooklyn, NY: South End Press.
+</div>
+<div id="ref-UN_2019" class="csl-entry" role="listitem">
+United Nations. 2019. <em>Principles and Recommendations for Population and Housing Censuses, Rev. 3</em>. New York: United Nations.
+</div>
+<div id="ref-Valentine_2007" class="csl-entry" role="listitem">
+Valentine, David. 2007. <em>Imagining Transgender: An Ethnography of a Category</em>. Durham: Duke University Press.
+</div>
+<div id="ref-West_Zimmerman_1987" class="csl-entry" role="listitem">
+West, Candace, and Don H. Zimmerman. 1987. <span>“Doing Gender.”</span> <em>Gender &amp; Society</em> 1 (2): 125–51. <a href="https://doi.org/10.1177/0891243287001002002">https://doi.org/10.1177/0891243287001002002</a>.
+</div>
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{fang2025,
+  author = {Fang, Christian},
+  title = {Let’s {Talk} {About} {Sex} (and {Demography)}},
+  date = {2025-09-24},
+  url = {https://www.christianfang.eu/posts/gender-self-id/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-fang2025" class="csl-entry quarto-appendix-citeas" role="listitem">
+Fang, Christian. 2025. <span>“Let’s Talk About Sex (and
+Demography).”</span> September 24, 2025. <a href="https://www.christianfang.eu/posts/gender-self-id/">https://www.christianfang.eu/posts/gender-self-id/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.christianfang\.eu\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
