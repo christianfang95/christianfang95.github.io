@@ -14,8 +14,8 @@ code-fold:
 bibliography: references.bib
 
 image: pop_pyramid.svg
-#resources:
-#  - mlpm.png
+resources:
+  - pop_pyramid.svg
 ---
 
 *Note: This article reflects my personal opinions, not those of my employer.*  
@@ -61,7 +61,7 @@ If the denominator includes males who are legally reclassified as female, it int
 It is sometimes argued that fertility statistics are already flawed because not all women can give birth. Yet demographic indicators operate at the group level, not the individual level. The TFR does not assume that every woman will reproduce, but that fertility is restricted to the female sex class. Including infertile or post-reproductive women is not an error but part of the design: the measure captures the average number of births per woman, given the distribution of fertility across the population. This is conceptually distinct from including males, who are never members of the reproductive sex class.
 
 ### 2.1.2 Fertility, Family Diversity, and Forecasting
-Another critique is that fertility measures reinforce heteronormative assumptions, especially since same-sex couples can also become parents [@Valentine_2007]. This, however, confuses athways to parenthood with fertility as a biological process. Adoption, step-parenthood, and surrogacy are important social realities, but they do not change the fact that every birth requires a uterus. The very existence of surrogacy debates highlights this: male couples can only become biological parents through the involvement of a female gestational surrogate. Fertility rates therefore remain indispensable as measures of biological reproduction and population replacement.
+Another critique is that fertility measures reinforce heteronormative assumptions, especially since same-sex couples can also become parents [@Valentine_2007]. This, however, confuses pathways to parenthood with fertility as a biological process. Adoption, step-parenthood, and surrogacy are important social realities, but they do not change the fact that every birth requires a uterus. The very existence of surrogacy debates highlights this: male couples can only become biological parents through the involvement of a female gestational surrogate. Fertility rates therefore remain indispensable as measures of biological reproduction and population replacement.
 
 Forecasting also does not assume heterosexual, monogamous marriages. It tracks births and cohort sizes, not family forms. Whether a child is raised by heterosexual parents, same-sex parents, or a single parent is irrelevant for the measure itself. What matters is the number of children born, because this determines future school enrollments, labor supply, and pension obligations. Family structure can—and should—be studied in its own right, but it is not a substitute for fertility as a demographic variable.
 
@@ -108,7 +108,7 @@ $$
 y_{it} = \alpha_i + \tau_t + \gamma'X_{it} + \varepsilon_{it}.
 $$
 
-Here, $y_{it}$ is the outcome for person $i$ in year $t$, $\tau_t$ are year effects, $X_{it}$ are time-varying covariates, and $\alpha_i$ captures all stable characteristics of individual $i$, including sex. The purpose of the within estimator is to estimate causal effects of time-varying regressors **net of sex and other stable factors**.
+Here, $y_{it}$ is the outcome for person $i$ in year $t$, $\tau_t$ are year effects, $X_{it}$ are time-varying covariates, and $\alpha_i$ captures all stable characteristics of individual $i$, including sex. The purpose of the within estimator is to estimate causal effects of time-varying regressors net of sex and other stable factors.
 
 If “sex” becomes mutable under self-ID, however, it no longer functions as a stable trait. Instead, it enters the model as a time-varying covariate:
 
