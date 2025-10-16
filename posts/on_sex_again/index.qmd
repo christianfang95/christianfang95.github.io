@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Follow-Up: Sex, Gender, Demography, and the Terms of Debate
+title: "Follow-Up: Sex, Gender, Demography, and the Terms of Debate"
 date: "2025-10-16" 
-description: A follow-up to my post on gender self-identification, examining the distinction between sex and gender, the implications for demographic data and policy, and how open debate can coexist with genuine protection for trans and queer people.
+description: A follow-up to my post on gender self-ID, examining the distinction between sex and gender, the implications for demographic data and policy, and how open debate can coexist with genuine protection for trans and queer people.
 categories: 
   - statistics
   - demography
