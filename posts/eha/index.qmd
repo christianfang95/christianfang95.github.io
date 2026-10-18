@@ -470,12 +470,14 @@ ggplot() +
       x = age_end,
       y = survival
     ),
-    linewidth = 1
+    linewidth = 1,
+    color = 'red',
+    alpha = 0.7
   ) +
   labs(
     x = "Age",
     y = "Survival probability",
-    title = "Kaplan–Meier and discrete-time logistic survival"
+    title = "Kaplan–Meier (black) and discrete-time logistic (red) survival"
   ) +
   theme_minimal()
 ```
