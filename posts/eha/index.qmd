@@ -10,6 +10,18 @@ categories:
   - R
 toc:
   true
+  
+format:
+  gfm:
+    variant: +yaml_metadata_block
+    wrap: preserve
+
+execute:
+  echo: true
+  warning: false
+  message: false
+
+output-file: index.md
 ---
 
     
