@@ -6,10 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Christian Fang">
 <meta name="dcterms.date" content="2026-10-18">
 <meta name="description" content="Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.">
 
-<title>Event History Analysis in R</title>
+<title>Event History Analysis in R – Christian Fang</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,21 +61,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="index_files/libs/clipboard/clipboard.min.js"></script>
-<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="index_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="index_files/libs/quarto-html/popper.min.js"></script>
-<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="index_files/libs/quarto-html/anchor.min.js"></script>
-<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15ea27bac76f9890c21e80949f497921.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8143d892e0ed555d9c4932a0b7ddc6cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -103,25 +153,118 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Event History Analysis in R – Christian Fang">
+<meta property="og:description" content="Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.">
+<meta property="og:site_name" content="Christian Fang">
 </head>
 
-<body class="quarto-light">
+<body class="nav-fixed quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christian Fang</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../research.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://github.com/christianfang95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://www.linkedin.com/in/fangchris95/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://scholar.google.de/citations?user=FePrRkEAAAAJ" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bank2"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Event History Analysis in R</h1>
+            <p class="subtitle lead">Kaplan–Meier and Discrete-Time Logistic Regression</p>
+                  <div>
+        <div class="description">
+          Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">demography</div>
+                <div class="quarto-category">R</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Christian Fang </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 18, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
   </ul></li>
   <li><a href="#survival-and-the-hazard" id="toc-survival-and-the-hazard" class="nav-link" data-scroll-target="#survival-and-the-hazard">Survival and the hazard</a></li>
   <li><a href="#kaplanmeier-survival" id="toc-kaplanmeier-survival" class="nav-link" data-scroll-target="#kaplanmeier-survival">Kaplan–Meier survival</a></li>
   <li><a href="#person-period-files" id="toc-person-period-files" class="nav-link" data-scroll-target="#person-period-files">Person-Period files</a></li>
   <li><a href="#discrete-time-eha-using-logistic-regression" id="toc-discrete-time-eha-using-logistic-regression" class="nav-link" data-scroll-target="#discrete-time-eha-using-logistic-regression">Discrete-time EHA using logistic regression</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#first-model-the-baseline-hazard-only" id="toc-first-model-the-baseline-hazard-only" class="nav-link" data-scroll-target="#first-model-the-baseline-hazard-only">First model: the baseline hazard only</a></li>
   <li><a href="#predicted-hazards-using-marginaleffects" id="toc-predicted-hazards-using-marginaleffects" class="nav-link" data-scroll-target="#predicted-hazards-using-marginaleffects">Predicted hazards using <code>marginaleffects</code></a></li>
   <li><a href="#from-predicted-hazards-back-to-survival" id="toc-from-predicted-hazards-back-to-survival" class="nav-link" data-scroll-target="#from-predicted-hazards-back-to-survival">From predicted hazards back to survival</a></li>
@@ -136,49 +279,18 @@ window.Quarto = {
   <li><a href="#differences-at-particular-ages" id="toc-differences-at-particular-ages" class="nav-link" data-scroll-target="#differences-at-particular-ages">Differences at particular ages</a></li>
   </ul></li>
   <li><a href="#modeling-the-baseline-hazard-differently" id="toc-modeling-the-baseline-hazard-differently" class="nav-link" data-scroll-target="#modeling-the-baseline-hazard-differently">Modeling the baseline hazard differently</a>
-  <ul class="collapse">
+  <ul>
   <li><a href="#logit-versus-complementary-log-log" id="toc-logit-versus-complementary-log-log" class="nav-link" data-scroll-target="#logit-versus-complementary-log-log">Logit versus complementary log-log</a></li>
   </ul></li>
   <li><a href="#the-logic-of-the-analysis" id="toc-the-logic-of-the-analysis" class="nav-link" data-scroll-target="#the-logic-of-the-analysis">The logic of the analysis</a></li>
   </ul>
 </nav>
-</div>
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Event History Analysis in R</h1>
-<p class="subtitle lead">Kaplan–Meier and Discrete-Time Logistic Regression</p>
-  <div class="quarto-categories">
-    <div class="quarto-category">statistics</div>
-    <div class="quarto-category">demography</div>
-    <div class="quarto-category">R</div>
-  </div>
-  </div>
-
-<div>
-  <div class="description">
-    Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.
-  </div>
-</div>
-
-
-<div class="quarto-title-meta">
-
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">October 18, 2026</p>
     </div>
-  </div>
-  
-    
-  </div>
-  
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
-</header>
+
 
 
 <section id="introduction" class="level1">
@@ -237,35 +349,35 @@ event = 0</code></pre>
 <h1>Survival and the hazard</h1>
 <p>Two quantities are central to event history analysis.</p>
 <p>The <strong>survival function</strong></p>
-<p><span class="math display">\[
+<p><span class="math display">
 S(t)=P(T&gt;t)
-\]</span></p>
-<p>gives the probability of remaining event-free beyond time <span class="math inline">\(t\)</span>.</p>
+</span></p>
+<p>gives the probability of remaining event-free beyond time <span class="math inline">t</span>.</p>
 <p>In our example:</p>
 <blockquote class="blockquote">
 <p>What is the probability that somebody who has reached age 50 survives beyond age 50?</p>
 </blockquote>
 <p>The <strong>hazard</strong> asks a different question. In discrete time:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 h_j =
 P(\text{death in interval }j
 \mid
 \text{alive at the beginning of interval }j).
-\]</span></p>
+</span></p>
 <p>For example:</p>
 <blockquote class="blockquote">
 <p>Among people who are alive at age 70, what is the probability that they die between ages 70 and 71?</p>
 </blockquote>
 <p>The two quantities are directly connected.</p>
 <p>If the hazards in successive intervals are</p>
-<p><span class="math display">\[
+<p><span class="math display">
 h_1,h_2,\ldots,h_j,
-\]</span></p>
-<p>then survival through interval <span class="math inline">\(j\)</span> is</p>
-<p><span class="math display">\[
+</span></p>
+<p>then survival through interval <span class="math inline">j</span> is</p>
+<p><span class="math display">
 S_j =
 \prod_{k=1}^{j}(1-h_k).
-\]</span></p>
+</span></p>
 <p>This relationship will become important when we estimate the hazard with logistic regression.</p>
 </section>
 <section id="kaplanmeier-survival" class="level1">
@@ -368,17 +480,17 @@ scania_pp |&gt;
 <h1>Discrete-time EHA using logistic regression</h1>
 <p>We now estimate the same mortality process using logistic regression.</p>
 <p>Because each row represents one interval during which a person is at risk, our dependent variable is</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(death_{it}=1).
-\]</span></p>
+</span></p>
 <p>More precisely, the model estimates</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(
 \text{death during interval }t
 \mid
 \text{alive at the start of interval }t
 ).
-\]</span></p>
+</span></p>
 <p>This is the <strong>discrete-time hazard</strong>.</p>
 <section id="first-model-the-baseline-hazard-only" class="level2">
 <h2 class="anchored" data-anchor-id="first-model-the-baseline-hazard-only">First model: the baseline hazard only</h2>
@@ -395,10 +507,10 @@ summary(m0)</code></pre>
 <p>Because we do not yet want to impose a particular shape on the baseline hazard.</p>
 <p>Instead, the model estimates a separate mortality probability for each age interval.</p>
 <p>Conceptually, this model is estimating</p>
-<p><span class="math display">\[
+<p><span class="math display">
 h_{50}, h_{51}, h_{52}, \ldots
-\]</span></p>
-<p>where, for example, <span class="math inline">\(h_{70}\)</span> is the probability of dying between approximately age 70 and 71 among people who are alive at age 70.</p>
+</span></p>
+<p>where, for example, <span class="math inline">h_{70}</span> is the probability of dying between approximately age 70 and 71 among people who are alive at age 70.</p>
 </section>
 <section id="predicted-hazards-using-marginaleffects" class="level2">
 <h2 class="anchored" data-anchor-id="predicted-hazards-using-marginaleffects">Predicted hazards using <code>marginaleffects</code></h2>
@@ -431,10 +543,10 @@ estimate = 0.033</code></pre>
 <h2 class="anchored" data-anchor-id="from-predicted-hazards-back-to-survival">From predicted hazards back to survival</h2>
 <p>We can now convert the predicted hazards into a survival curve.</p>
 <p>Recall:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 S_j =
 \prod_{k=1}^{j}(1-h_k).
-\]</span></p>
+</span></p>
 <p>Using R, this cumulative product is calculated with <code>cumprod()</code>.</p>
 <pre class="{r}"><code>surv0 &lt;- hazard0 |&gt;
   as.data.frame() |&gt;
@@ -499,14 +611,12 @@ km_df &lt;- data.frame(
       x = age_end,
       y = survival
     ),
-    linewidth = 1,
-    color = 'red',
-    alpha = 0.7
+    linewidth = 1
   ) +
   labs(
     x = "Age",
     y = "Survival probability",
-    title = "Kaplan–Meier (black) and discrete-time logistic (red) survival"
+    title = "Kaplan–Meier and discrete-time logistic survival"
   ) +
   theme_minimal()</code></pre>
 <p>The curves essentially the same survival process, which illustrates an important point:</p>
@@ -515,22 +625,13 @@ km_df &lt;- data.frame(
 </blockquote>
 <p>Both describe the same underlying process.</p>
 <p>Kaplan–Meier estimates survival directly. The logistic regression estimates the <strong>interval-specific hazard</strong>, after which we reconstruct survival by accumulating those hazards:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \hat h_t
 \quad\longrightarrow\quad
 \prod_{k \leq t}(1-\hat h_k)
 \quad\longrightarrow\quad
 \hat S(t).
-\]</span></p>
-<p>We can also compare the Kaplan-Meier survival estimates at ages 60, 70 and 80 directly to those from the logistic regression.</p>
-<pre class="{r}"><code>summary(
-  km,
-  times = c(60, 70, 80)
-)</code></pre>
-<pre class="{r}"><code>surv0 |&gt;
-  filter(age_end %in% c(60, 70, 80)) |&gt;
-  select(age_end, survival)</code></pre>
-<p>As we see, the estimates are basically identical.</p>
+</span></p>
 <p>So why use regression at all?</p>
 <p>Because regression allows us to introduce explanatory variables.</p>
 </section>
@@ -748,7 +849,7 @@ Model-based difference after adjusting for SES</code></pre>
 <section id="modeling-the-baseline-hazard-differently" class="level1">
 <h1>Modeling the baseline hazard differently</h1>
 <p>For the first model we used:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is useful because it imposes essentially no functional form on the age pattern of mortality.</p>
 <p>But it requires many parameters.</p>
 <p>Once the basic logic is clear, we could use a smoother specification.</p>
@@ -768,10 +869,10 @@ Model-based difference after adjusting for SES</code></pre>
 <section id="logit-versus-complementary-log-log" class="level2">
 <h2 class="anchored" data-anchor-id="logit-versus-complementary-log-log">Logit versus complementary log-log</h2>
 <p>So far we have used:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This gives a discrete-time logistic event history model.</p>
 <p>Another common specification is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"cloglog"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"cloglog"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For example:</p>
 <pre class="{r}"><code>m_cloglog &lt;- glm(
   death ~ factor(age) + sex + ses,
@@ -785,13 +886,13 @@ Model-based difference after adjusting for SES</code></pre>
 <section id="the-logic-of-the-analysis" class="level1">
 <h1>The logic of the analysis</h1>
 <p>The whole exercise can now be understood as one sequence:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \text{survival data}
 \rightarrow
 \text{Kaplan–Meier}
-\]</span></p>
+</span></p>
 <p>followed by</p>
-<p><span class="math display">\[
+<p><span class="math display">
 \text{person-period data}
 \rightarrow
 \text{logistic model of the hazard}
@@ -801,20 +902,31 @@ Model-based difference after adjusting for SES</code></pre>
 \prod_t (1-\hat h_t)
 \rightarrow
 \hat S(t).
-\]</span></p>
+</span></p>
 <p>With no covariates, this gives us another way to describe the same basic survival process estimated by Kaplan–Meier.</p>
 <p>Once covariates are introduced, the regression model allows us to move beyond description and calculate survival curves under different covariate scenarios.</p>
 <p>The key insight is therefore not simply that logistic regression can be used for EHA.</p>
 <p>It is that a discrete-time survival process can be decomposed into a sequence of conditional binary probabilities:</p>
-<p><span class="math display">\[
+<p><span class="math display">
 P(event_t=1 \mid event_{t-1}=0).
-\]</span></p>
+</span></p>
 <p>Model those probabilities, and we model the hazard.</p>
 <p>Accumulate them, and we recover survival.</p>
+
+
 </section>
 
-</main>
-<!-- /main column -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{fang2026,
+  author = {Fang, Christian},
+  title = {Event {History} {Analysis} in {R}},
+  date = {2026-10-18},
+  url = {https://www.christianfang.eu/posts/eha/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-fang2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Fang, Christian. 2026. <span>“Event History Analysis in R.”</span>
+October 18, 2026. <a href="https://www.christianfang.eu/posts/eha/">https://www.christianfang.eu/posts/eha/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -888,7 +1000,7 @@ P(event_t=1 \mid event_{t-1}=0).
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/www\.christianfang\.eu\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1220,4 +1332,5 @@ P(event_t=1 \mid event_{t-1}=0).
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
