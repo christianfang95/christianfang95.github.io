@@ -10,19 +10,6 @@ categories:
   - R
 toc:
   true
-
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: true
-    code-tools: true
-    embed-resources: true
-    
-execute:
-  echo: true
-  warning: false
-  message: false
 ---
 
     
