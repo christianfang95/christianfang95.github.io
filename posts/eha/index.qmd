@@ -2,17 +2,23 @@
 layout: post
 title: "Event History Analysis in R"
 subtitle: "Kaplan–Meier and Discrete-Time Logistic Regression"
-date: "2026-10-18" 
+date: "2026-10-18"
 description: Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.
-categories: 
+
+categories:
   - statistics
   - demography
   - R
-toc:
-  true
-engine: markdown
-code-fold:
-    true
+
+toc: true
+engine: knitr
+
+code-fold: true
+
+execute:
+  echo: true
+  warning: false
+  message: false
 ---
 
     
