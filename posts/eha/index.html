@@ -156,7 +156,10 @@ window.Quarto = {
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Event History Analysis in R – Christian Fang">
 <meta property="og:description" content="Learn how to run a basic survival/event-history analysis in R using Kaplan-Meier and logistic regression.">
+<meta property="og:image" content="https://www.christianfang.eu/posts/eha/index_files/figure-html/unnamed-chunk-6-1.png">
 <meta property="og:site_name" content="Christian Fang">
+<meta property="og:image:height" content="960">
+<meta property="og:image:width" content="1344">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -301,28 +304,69 @@ window.Quarto = {
 <section id="setup" class="level2">
 <h2 class="anchored" data-anchor-id="setup">Setup</h2>
 <p>Install the packages if necessary:</p>
-<pre class="{r}"><code>#| eval: false
-
-install.packages(c(
-  "eha",
-  "survival",
-  "dplyr",
-  "tidyr",
-  "ggplot2",
-  "marginaleffects"
-))</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"eha"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"survival"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"dplyr"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tidyr"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"ggplot2"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"marginaleffects"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Load the packages:</p>
-<pre class="{r}"><code>library(eha)
-library(survival)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(marginaleffects)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(eha)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Load the Scania data:</p>
-<pre class="{r}"><code>data(scania)
-
-head(scania)
-summary(scania)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(scania)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scania)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id enter   exit event birthdate    sex parish   ses immigrant
+29   1    50 59.242     1  1781.454   male      1 lower        no
+66   2    50 53.539     0  1821.350   male      1 lower       yes
+70   3    50 62.155     1  1788.936   male      1 lower       yes
+83   4    50 65.142     1  1796.219 female      1 lower       yes
+100  5    50 51.280     0  1822.713   male      1 lower       yes
+132  6    50 70.776     1  1813.547 female      1 lower       yes</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(scania)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id             enter         exit           event          birthdate   
+ Min.   :   1.0   Min.   :50   Min.   :50.00   Min.   :0.0000   Min.   :1763  
+ 1st Qu.: 483.5   1st Qu.:50   1st Qu.:55.37   1st Qu.:0.0000   1st Qu.:1786  
+ Median : 966.0   Median :50   Median :62.70   Median :1.0000   Median :1808  
+ Mean   : 966.0   Mean   :50   Mean   :63.97   Mean   :0.5624   Mean   :1806  
+ 3rd Qu.:1448.5   3rd Qu.:50   3rd Qu.:72.05   3rd Qu.:1.0000   3rd Qu.:1825  
+ Max.   :1931.0   Max.   :50   Max.   :80.00   Max.   :1.0000   Max.   :1845  
+     sex      parish      ses       immigrant 
+ male  :975   1: 159   upper: 375   no : 759  
+ female:956   2: 181   lower:1556   yes:1172  
+              3: 180                          
+              4: 258                          
+              5:1153                          
+                                              </code></pre>
+</div>
+</div>
 <p>The most important variables include:</p>
 <ul>
 <li><code>id</code>: person identifier</li>
@@ -384,34 +428,75 @@ S_j =
 <h1>Kaplan–Meier survival</h1>
 <p>We begin with the Kaplan–Meier estimator.</p>
 <p>Create a survival object:</p>
-<pre class="{r}"><code>surv &lt;- Surv(
-  time = scania$enter,
-  time2 = scania$exit,
-  event = scania$event
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>surv <span class="ot">&lt;-</span> <span class="fu">Surv</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">time =</span> scania<span class="sc">$</span>enter,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">time2 =</span> scania<span class="sc">$</span>exit,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">event =</span> scania<span class="sc">$</span>event</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Because we specify both entry and exit time, this takes the form</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Surv</span>(enter, exit, event)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Surv</span>(enter, exit, event)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>and describes the period during which each person is at risk.</p>
 <p>Estimate overall survival:</p>
-<pre class="{r}"><code>km &lt;- survfit(
-  surv ~ 1,
-  data = scania
-)
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>km <span class="ot">&lt;-</span> <span class="fu">survfit</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  surv <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>km</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: survfit(formula = surv ~ 1, data = scania)
 
-km</code></pre>
+        n events median 0.95LCL 0.95UCL
+[1,] 1931   1086   69.6    68.9    70.4</code></pre>
+</div>
+</div>
 <p>Plot the survival curve:</p>
-<pre class="{r}"><code>plot(
-  km,
-  xlab = "Age",
-  ylab = "Survival probability",
-  main = "Kaplan–Meier survival curve"
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  km,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Age"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Survival probability"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Kaplan–Meier survival curve"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>The curve starts at 1 at age 50 and declines as deaths occur.</p>
 <p>We can request survival probabilities at selected ages:</p>
-<pre class="{r}"><code>summary(
-  km,
-  times = c(60, 70, 80)
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  km,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">80</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: survfit(formula = surv ~ 1, data = scania)
+
+ time n.risk n.event survival std.err lower 95% CI upper 95% CI
+   60   1129     352    0.783  0.0103        0.763        0.804
+   70    578     395    0.483  0.0136        0.457        0.510
+   80    146     339    0.159  0.0113        0.139        0.183</code></pre>
+</div>
+</div>
 <p>For example, the survival probability at age 70 answers:</p>
 <blockquote class="blockquote">
 <p>Among people who survived to age 50, what proportion are estimated to survive to at least age 70?</p>
@@ -439,41 +524,92 @@ km</code></pre>
 <li><code>death = 1</code> means that the person dies during the interval.</li>
 </ul>
 <p>Create the person-period data:</p>
-<pre class="{r}"><code>scania_pp &lt;- scania |&gt;
-  mutate(
-    event = as.integer(event),
-    n_intervals = if_else(
-      event == 1,
-      ceiling(exit) - 50,
-      floor(exit) - 50
-    )
-  ) |&gt;
-  filter(n_intervals &gt; 0) |&gt;
-  uncount(
-    n_intervals,
-    .id = "period",
-    .remove = FALSE
-  ) |&gt;
-  mutate(
-    age = 49 + period,
-    death = as.integer(
-      event == 1 &amp;
-        period == n_intervals
-    )
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>scania_pp <span class="ot">&lt;-</span> scania <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">event =</span> <span class="fu">as.integer</span>(event),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_intervals =</span> <span class="fu">if_else</span>(</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      event <span class="sc">==</span> <span class="dv">1</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ceiling</span>(exit) <span class="sc">-</span> <span class="dv">50</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">floor</span>(exit) <span class="sc">-</span> <span class="dv">50</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_intervals <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    n_intervals,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">.id =</span> <span class="st">"period"</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.remove =</span> <span class="cn">FALSE</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">age =</span> <span class="dv">49</span> <span class="sc">+</span> period,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">death =</span> <span class="fu">as.integer</span>(</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      event <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        period <span class="sc">==</span> n_intervals</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Inspect the resulting file:</p>
-<pre class="{r}"><code>scania_pp |&gt;
-  select(id, age, death, sex, ses) |&gt;
-  head(20)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>scania_pp <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, age, death, sex, ses) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age death  sex   ses
+1   1  50     0 male lower
+2   1  51     0 male lower
+3   1  52     0 male lower
+4   1  53     0 male lower
+5   1  54     0 male lower
+6   1  55     0 male lower
+7   1  56     0 male lower
+8   1  57     0 male lower
+9   1  58     0 male lower
+10  1  59     1 male lower
+11  2  50     0 male lower
+12  2  51     0 male lower
+13  2  52     0 male lower
+14  3  50     0 male lower
+15  3  51     0 male lower
+16  3  52     0 male lower
+17  3  53     0 male lower
+18  3  54     0 male lower
+19  3  55     0 male lower
+20  3  56     0 male lower</code></pre>
+</div>
+</div>
 <p>We can also inspect one person who dies:</p>
-<pre class="{r}"><code>example_id &lt;- scania_pp |&gt;
-  filter(death == 1) |&gt;
-  slice(1) |&gt;
-  pull(id)
-
-scania_pp |&gt;
-  filter(id == example_id) |&gt;
-  select(id, age, death)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>example_id <span class="ot">&lt;-</span> scania_pp <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(death <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(id)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>scania_pp <span class="sc">|&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(id <span class="sc">==</span> example_id) <span class="sc">|&gt;</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, age, death)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   id age death
+1   1  50     0
+2   1  51     0
+3   1  52     0
+4   1  53     0
+5   1  54     0
+6   1  55     0
+7   1  56     0
+8   1  57     0
+9   1  58     0
+10  1  59     1</code></pre>
+</div>
+</div>
 <p>There are multiple observations for this person but only one event, in the final interval.</p>
 </section>
 <section id="discrete-time-eha-using-logistic-regression" class="level1">
@@ -496,13 +632,67 @@ P(
 <h2 class="anchored" data-anchor-id="first-model-the-baseline-hazard-only">First model: the baseline hazard only</h2>
 <p>Before adding explanatory variables such as sex or socioeconomic status, we estimate a model containing only <strong>age</strong>.</p>
 <p>For the first model, it is useful to treat age as categorical:</p>
-<pre class="{r}"><code>m0 &lt;- glm(
-  death ~ factor(age),
-  data = scania_pp,
-  family = binomial(link = "logit")
-)
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  death <span class="sc">~</span> <span class="fu">factor</span>(age),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania_pp,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = death ~ factor(age), family = binomial(link = "logit"), 
+    data = scania_pp)
 
-summary(m0)</code></pre>
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   -4.01173    0.17562 -22.843  &lt; 2e-16 ***
+factor(age)51  0.19634    0.24028   0.817 0.413875    
+factor(age)52 -0.20900    0.27034  -0.773 0.439455    
+factor(age)53  0.02659    0.25682   0.104 0.917552    
+factor(age)54  0.37212    0.23908   1.557 0.119588    
+factor(age)55  0.34960    0.24358   1.435 0.151228    
+factor(age)56  0.31006    0.24878   1.246 0.212660    
+factor(age)57  0.44690    0.24374   1.834 0.066719 .  
+factor(age)58  0.73585    0.23217   3.169 0.001528 ** 
+factor(age)59  0.64621    0.23952   2.698 0.006977 ** 
+factor(age)60  0.61984    0.24404   2.540 0.011088 *  
+factor(age)61  0.73260    0.24114   3.038 0.002381 ** 
+factor(age)62  0.91227    0.23483   3.885 0.000102 ***
+factor(age)63  0.49083    0.26263   1.869 0.061637 .  
+factor(age)64  0.86804    0.24297   3.573 0.000353 ***
+factor(age)65  1.06229    0.23643   4.493 7.02e-06 ***
+factor(age)66  1.20233    0.23325   5.155 2.54e-07 ***
+factor(age)67  1.25633    0.23455   5.356 8.50e-08 ***
+factor(age)68  1.15495    0.24377   4.738 2.16e-06 ***
+factor(age)69  1.48080    0.23305   6.354 2.10e-10 ***
+factor(age)70  0.90007    0.27270   3.301 0.000965 ***
+factor(age)71  1.48703    0.24195   6.146 7.94e-10 ***
+factor(age)72  1.73214    0.23642   7.326 2.36e-13 ***
+factor(age)73  1.51389    0.25429   5.953 2.63e-09 ***
+factor(age)74  1.70036    0.25134   6.765 1.33e-11 ***
+factor(age)75  1.87335    0.25056   7.477 7.63e-14 ***
+factor(age)76  2.10805    0.24714   8.530  &lt; 2e-16 ***
+factor(age)77  2.36307    0.24627   9.595  &lt; 2e-16 ***
+factor(age)78  2.25964    0.26449   8.543  &lt; 2e-16 ***
+factor(age)79  2.16362    0.28490   7.594 3.10e-14 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 9121.7  on 27177  degrees of freedom
+Residual deviance: 8685.2  on 27148  degrees of freedom
+AIC: 8745.2
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
 <p>Why use <code>factor(age)</code>?</p>
 <p>Because we do not yet want to impose a particular shape on the baseline hazard.</p>
 <p>Instead, the model estimates a separate mortality probability for each age interval.</p>
@@ -517,19 +707,98 @@ h_{50}, h_{51}, h_{52}, \ldots
 <p>The coefficients from a logistic regression are expressed as log odds.</p>
 <p>Those are usually not the most useful quantities for interpretation.</p>
 <p>We can instead use <code>marginaleffects</code> to obtain predicted probabilities.</p>
-<pre class="{r}"><code>hazard0 &lt;- predictions(
-  m0,
-  newdata = datagrid(
-    age = sort(unique(scania_pp$age))
-  ),
-  type = "response"
-)
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>hazard0 <span class="ot">&lt;-</span> <span class="fu">predictions</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  m0,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> <span class="fu">datagrid</span>(</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">age =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(scania_pp<span class="sc">$</span>age))</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"response"</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>hazard0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ age Estimate Std. Error    z Pr(&gt;|z|)    S   2.5 % 97.5 %
+  50   0.0178    0.00307 5.80   &lt;0.001 27.1 0.01177 0.0238
+  51   0.0216    0.00346 6.23   &lt;0.001 31.0 0.01478 0.0283
+  52   0.0145    0.00293 4.94   &lt;0.001 20.3 0.00873 0.0202
+  53   0.0183    0.00336 5.44   &lt;0.001 24.1 0.01167 0.0248
+  54   0.0256    0.00404 6.33   &lt;0.001 31.9 0.01766 0.0335
+  55   0.0250    0.00412 6.08   &lt;0.001 29.6 0.01696 0.0331
+  56   0.0241    0.00414 5.82   &lt;0.001 27.3 0.01597 0.0322
+  57   0.0275    0.00452 6.08   &lt;0.001 29.7 0.01866 0.0364
+  58   0.0364    0.00533 6.83   &lt;0.001 36.8 0.02597 0.0468
+  59   0.0334    0.00526 6.35   &lt;0.001 32.1 0.02309 0.0437
+  60   0.0325    0.00534 6.10   &lt;0.001 29.8 0.02209 0.0430
+  61   0.0363    0.00578 6.28   &lt;0.001 31.5 0.02497 0.0476
+  62   0.0431    0.00643 6.70   &lt;0.001 35.5 0.03052 0.0557
+  63   0.0287    0.00545 5.27   &lt;0.001 22.8 0.01805 0.0394
+  64   0.0413    0.00665 6.21   &lt;0.001 30.8 0.02830 0.0544
+  65   0.0498    0.00749 6.65   &lt;0.001 35.0 0.03509 0.0644
+  66   0.0568    0.00823 6.91   &lt;0.001 37.6 0.04070 0.0729
+  67   0.0598    0.00874 6.84   &lt;0.001 36.9 0.04265 0.0769
+  68   0.0543    0.00869 6.26   &lt;0.001 31.2 0.03731 0.0714
+  69   0.0737    0.01046 7.05   &lt;0.001 39.0 0.05322 0.0942
+  70   0.0426    0.00851 5.01   &lt;0.001 20.8 0.02594 0.0593
+  71   0.0741    0.01142 6.49   &lt;0.001 33.4 0.05175 0.0965
+  72   0.0928    0.01333 6.96   &lt;0.001 38.1 0.06670 0.1190
+  73   0.0760    0.01292 5.88   &lt;0.001 27.9 0.05069 0.1013
+  74   0.0902    0.01475 6.11   &lt;0.001 29.9 0.06127 0.1191
+  75   0.1054    0.01685 6.25   &lt;0.001 31.2 0.07239 0.1385
+  76   0.1297    0.01963 6.61   &lt;0.001 34.6 0.09122 0.1682
+  77   0.1613    0.02336 6.91   &lt;0.001 37.5 0.11551 0.2071
+  78   0.1478    0.02491 5.93   &lt;0.001 28.3 0.09896 0.1966
+  79   0.1361    0.02638 5.16   &lt;0.001 21.9 0.08440 0.1878
 
-hazard0</code></pre>
+Type: response</code></pre>
+</div>
+</div>
 <p>The variable <code>estimate</code> now contains the estimated probability of dying during each age interval.</p>
-<pre class="{r}"><code>hazard0 |&gt;
-  as.data.frame() |&gt;
-  select(age, estimate)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>hazard0 <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age, estimate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   age   estimate
+1   50 0.01778017
+2   51 0.02155417
+3   52 0.01447528
+4   53 0.01825047
+5   54 0.02559055
+6   55 0.02503477
+7   56 0.02408759
+8   57 0.02752294
+9   58 0.03640777
+10  59 0.03339041
+11  60 0.03254973
+12  61 0.03629417
+13  62 0.04312939
+14  63 0.02872340
+15  64 0.04134078
+16  65 0.04976303
+17  66 0.05681818
+18  67 0.05978261
+19  68 0.05433186
+20  69 0.07371795
+21  70 0.04262877
+22  71 0.07414449
+23  72 0.09282700
+24  73 0.07600950
+25  74 0.09018568
+26  75 0.10542169
+27  76 0.12969283
+28  77 0.16129032
+29  78 0.14778325
+30  79 0.13609467</code></pre>
+</div>
+</div>
 <p>An estimate such as</p>
 <pre class="text"><code>age      = 59
 estimate = 0.033</code></pre>
@@ -548,77 +817,149 @@ S_j =
 \prod_{k=1}^{j}(1-h_k).
 </span></p>
 <p>Using R, this cumulative product is calculated with <code>cumprod()</code>.</p>
-<pre class="{r}"><code>surv0 &lt;- hazard0 |&gt;
-  as.data.frame() |&gt;
-  mutate(age = as.numeric(levels(age))) |&gt;
-  arrange(age) |&gt;
-  mutate(
-    survival = cumprod(1 - estimate),
-    age_end = age + 1
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>surv0 <span class="ot">&lt;-</span> hazard0 <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">as.numeric</span>(<span class="fu">levels</span>(age))) <span class="sc">|&gt;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(age) <span class="sc">|&gt;</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">survival =</span> <span class="fu">cumprod</span>(<span class="dv">1</span> <span class="sc">-</span> estimate),</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_end =</span> age <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Inspect the result:</p>
-<pre class="{r}"><code>surv0 |&gt;
-  select(
-    age,
-    estimate,
-    age_end,
-    survival
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>surv0 <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    age,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    estimate,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    age_end,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    survival</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>   age   estimate age_end  survival
+1   50 0.01778017      51 0.9822198
+2   51 0.02155417      52 0.9610489
+3   52 0.01447528      53 0.9471374
+4   53 0.01825047      54 0.9298517
+5   54 0.02559055      55 0.9060563
+6   55 0.02503477      56 0.8833734
+7   56 0.02408759      57 0.8620951
+8   57 0.02752294      58 0.8383677
+9   58 0.03640777      59 0.8078446
+10  59 0.03339041      60 0.7808703
+11  60 0.03254973      61 0.7554532
+12  61 0.03629417      62 0.7280347
+13  62 0.04312939      63 0.6966350
+14  63 0.02872340      64 0.6766252
+15  64 0.04134078      65 0.6486530
+16  65 0.04976303      66 0.6163741
+17  66 0.05681818      67 0.5813528
+18  67 0.05978261      68 0.5465980
+19  68 0.05433186      69 0.5169003
+20  69 0.07371795      70 0.4787955
+21  70 0.04262877      71 0.4583850
+22  71 0.07414449      72 0.4243983
+23  72 0.09282700      73 0.3850027
+24  73 0.07600950      74 0.3557388
+25  74 0.09018568      75 0.3236563
+26  75 0.10542169      76 0.2895359
+27  76 0.12969283      77 0.2519852
+28  77 0.16129032      78 0.2113424
+29  78 0.14778325      79 0.1801095
+30  79 0.13609467      80 0.1555976</code></pre>
+</div>
+</div>
 <p>For every interval:</p>
 <ul>
 <li><code>estimate</code> is the probability of dying during the interval.</li>
 <li><code>survival</code> is the probability of surviving all intervals up to its end.</li>
 </ul>
 <p>Plot the model-based survival curve:</p>
-<pre class="{r}"><code>ggplot(
-  surv0,
-  aes(
-    x = age_end,
-    y = survival
-  )
-) +
-  geom_line(linewidth = 1) +
-  labs(
-    x = "Age",
-    y = "Survival probability",
-    title = "Survival derived from discrete-time logistic regression"
-  ) +
-  theme_minimal()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  surv0,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> age_end,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> survival</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Survival probability"</span>,</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Survival derived from discrete-time logistic regression"</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="comparing-logistic-regression-with-kaplanmeier" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-logistic-regression-with-kaplanmeier">Comparing logistic regression with Kaplan–Meier</h2>
 <p>We can now compare the two approaches.</p>
 <p>First extract the Kaplan–Meier estimates:</p>
-<pre class="{r}"><code>km_summary &lt;- summary(km)
-
-km_df &lt;- data.frame(
-  age = km_summary$time,
-  survival = km_summary$surv
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>km_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(km)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>km_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">age =</span> km_summary<span class="sc">$</span>time,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">survival =</span> km_summary<span class="sc">$</span>surv</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Then plot the Kaplan–Meier curve together with the survival curve reconstructed from the discrete-time logistic regression:</p>
-<pre class="{r}"><code>ggplot() +
-  geom_step(
-    data = km_df,
-    aes(
-      x = age,
-      y = survival
-    ),
-    linewidth = 0.9
-  ) +
-  geom_line(
-    data = surv0,
-    aes(
-      x = age_end,
-      y = survival
-    ),
-    linewidth = 1
-  ) +
-  labs(
-    x = "Age",
-    y = "Survival probability",
-    title = "Kaplan–Meier and discrete-time logistic survival"
-  ) +
-  theme_minimal()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> km_df,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> age,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> survival</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.9</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> surv0,</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> age_end,</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> survival</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="dv">1</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Survival probability"</span>,</span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Kaplan–Meier and discrete-time logistic survival"</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>The curves essentially the same survival process, which illustrates an important point:</p>
 <blockquote class="blockquote">
 <p>Kaplan–Meier and discrete-time logistic regression are not estimating completely different phenomena.</p>
@@ -638,13 +979,69 @@ km_df &lt;- data.frame(
 <section id="adding-covariates" class="level2">
 <h2 class="anchored" data-anchor-id="adding-covariates">Adding covariates</h2>
 <p>We now extend the model by adding sex and socioeconomic status.</p>
-<pre class="{r}"><code>m1 &lt;- glm(
-  death ~ factor(age) + sex + ses,
-  data = scania_pp,
-  family = binomial(link = "logit")
-)
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  death <span class="sc">~</span> <span class="fu">factor</span>(age) <span class="sc">+</span> sex <span class="sc">+</span> ses,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania_pp,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = death ~ factor(age) + sex + ses, family = binomial(link = "logit"), 
+    data = scania_pp)
 
-summary(m1)</code></pre>
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)   -4.01420    0.18806 -21.345  &lt; 2e-16 ***
+factor(age)51  0.19612    0.24029   0.816 0.414388    
+factor(age)52 -0.20922    0.27034  -0.774 0.438980    
+factor(age)53  0.02659    0.25683   0.104 0.917529    
+factor(age)54  0.37214    0.23908   1.557 0.119571    
+factor(age)55  0.34943    0.24359   1.435 0.151423    
+factor(age)56  0.30984    0.24879   1.245 0.212985    
+factor(age)57  0.44695    0.24374   1.834 0.066695 .  
+factor(age)58  0.73578    0.23218   3.169 0.001529 ** 
+factor(age)59  0.64587    0.23952   2.696 0.007008 ** 
+factor(age)60  0.61971    0.24404   2.539 0.011106 *  
+factor(age)61  0.73214    0.24115   3.036 0.002397 ** 
+factor(age)62  0.91162    0.23484   3.882 0.000104 ***
+factor(age)63  0.49014    0.26264   1.866 0.062010 .  
+factor(age)64  0.86770    0.24298   3.571 0.000355 ***
+factor(age)65  1.06187    0.23643   4.491 7.08e-06 ***
+factor(age)66  1.20193    0.23325   5.153 2.56e-07 ***
+factor(age)67  1.25633    0.23456   5.356 8.50e-08 ***
+factor(age)68  1.15485    0.24377   4.737 2.16e-06 ***
+factor(age)69  1.48082    0.23305   6.354 2.10e-10 ***
+factor(age)70  0.90005    0.27270   3.300 0.000965 ***
+factor(age)71  1.48711    0.24195   6.146 7.93e-10 ***
+factor(age)72  1.73238    0.23643   7.327 2.35e-13 ***
+factor(age)73  1.51364    0.25430   5.952 2.64e-09 ***
+factor(age)74  1.70035    0.25135   6.765 1.33e-11 ***
+factor(age)75  1.87393    0.25057   7.479 7.51e-14 ***
+factor(age)76  2.10797    0.24715   8.529  &lt; 2e-16 ***
+factor(age)77  2.36268    0.24628   9.594  &lt; 2e-16 ***
+factor(age)78  2.25939    0.26450   8.542  &lt; 2e-16 ***
+factor(age)79  2.16426    0.28492   7.596 3.05e-14 ***
+sexfemale      0.04293    0.06283   0.683 0.494487    
+seslower      -0.02372    0.07754  -0.306 0.759710    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 9121.7  on 27177  degrees of freedom
+Residual deviance: 8684.7  on 27146  degrees of freedom
+AIC: 8748.7
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+</div>
 <p>Age still represents the baseline hazard.</p>
 <p>But the model now also allows mortality to differ according to:</p>
 <ul>
@@ -653,7 +1050,28 @@ summary(m1)</code></pre>
 </ul>
 <p>For example, the coefficient for sex describes how the log odds of dying during an interval differ between men and women at the same age and holding SES constant.</p>
 <p>We could convert coefficients into odds ratios:</p>
-<pre class="{r}"><code>exp(coef(m1))</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">coef</span>(m1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) factor(age)51 factor(age)52 factor(age)53 factor(age)54 
+   0.01805746    1.21667336    0.81121756    1.02695041    1.45083829 
+factor(age)55 factor(age)56 factor(age)57 factor(age)58 factor(age)59 
+   1.41825989    1.36320329    1.56353171    2.08710355    1.90764438 
+factor(age)60 factor(age)61 factor(age)62 factor(age)63 factor(age)64 
+   1.85838323    2.07953296    2.48836048    1.63253817    2.38141646 
+factor(age)65 factor(age)66 factor(age)67 factor(age)68 factor(age)69 
+   2.89176512    3.32652277    3.51249759    3.17353191    4.39656138 
+factor(age)70 factor(age)71 factor(age)72 factor(age)73 factor(age)74 
+   2.45973772    4.42427640    5.65408255    4.54323253    5.47583918 
+factor(age)75 factor(age)76 factor(age)77 factor(age)78 factor(age)79 
+   6.51381758    8.23153443   10.61935091    9.57721917    8.70817166 
+    sexfemale      seslower 
+   1.04386295    0.97656174 </code></pre>
+</div>
+</div>
 <p>However, predicted probabilities and survival curves are generally easier to interpret.</p>
 </section>
 <section id="why-adjusted-survival-curves" class="level2">
@@ -679,30 +1097,40 @@ summary(m1)</code></pre>
 <section id="creating-counterfactual-prediction-data" class="level2">
 <h2 class="anchored" data-anchor-id="creating-counterfactual-prediction-data">Creating counterfactual prediction data</h2>
 <p>First create one baseline observation per person:</p>
-<pre class="{r}"><code>baseline &lt;- scania_pp |&gt;
-  distinct(
-    id,
-    sex,
-    ses
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>baseline <span class="ot">&lt;-</span> scania_pp <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    id,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    sex,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    ses</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Now create every combination of:</p>
 <ul>
 <li>person;</li>
 <li>age;</li>
 <li>hypothetical sex.</li>
 </ul>
-<pre class="{r}"><code>prediction_data &lt;- baseline |&gt;
-  select(id, ses) |&gt;
-  crossing(
-    age = sort(unique(scania_pp$age)),
-    sex_scenario = levels(scania_pp$sex)
-  ) |&gt;
-  mutate(
-    sex = factor(
-      sex_scenario,
-      levels = levels(scania_pp$sex)
-    )
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>prediction_data <span class="ot">&lt;-</span> baseline <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, ses) <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">crossing</span>(</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">age =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(scania_pp<span class="sc">$</span>age)),</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex_scenario =</span> <span class="fu">levels</span>(scania_pp<span class="sc">$</span>sex)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex =</span> <span class="fu">factor</span>(</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>      sex_scenario,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">levels</span>(scania_pp<span class="sc">$</span>sex)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Each person now appears at every age under both sex scenarios.</p>
 <p>Their observed SES is retained.</p>
 <p>This is important because we want to compare sex while averaging over the same SES distribution.</p>
@@ -710,12 +1138,17 @@ summary(m1)</code></pre>
 <section id="predicting-adjusted-hazards-with-marginaleffects" class="level2">
 <h2 class="anchored" data-anchor-id="predicting-adjusted-hazards-with-marginaleffects">Predicting adjusted hazards with <code>marginaleffects</code></h2>
 <p>Generate predicted interval-specific hazards:</p>
-<pre class="{r}"><code>adjusted_hazards &lt;- predictions(
-  m1,
-  newdata = prediction_data,
-  type = "response"
-) |&gt;
-  as.data.frame()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>adjusted_hazards <span class="ot">&lt;-</span> <span class="fu">predictions</span>(</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  m1,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> prediction_data,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"response"</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>We now have a predicted probability of death for:</p>
 <ul>
 <li>every individual;</li>
@@ -723,63 +1156,99 @@ summary(m1)</code></pre>
 <li>each hypothetical sex.</li>
 </ul>
 <p>For example:</p>
-<pre class="{r}"><code>adjusted_hazards |&gt;
-  select(
-    id,
-    age,
-    sex_scenario,
-    ses,
-    estimate
-  ) |&gt;
-  head()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>adjusted_hazards <span class="sc">|&gt;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    id,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    age,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    sex_scenario,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    ses,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    estimate</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>  id age sex_scenario   ses   estimate
+1  1  50       female lower 0.01807499
+2  1  50         male lower 0.01732865
+3  1  51       female lower 0.02190557
+4  1  51         male lower 0.02100444
+5  1  52       female lower 0.01471296
+6  1  52         male lower 0.01410344</code></pre>
+</div>
+</div>
 <p>The <code>estimate</code> column is again the discrete-time hazard.</p>
 </section>
 <section id="from-adjusted-hazards-to-adjusted-survival" class="level2">
 <h2 class="anchored" data-anchor-id="from-adjusted-hazards-to-adjusted-survival">From adjusted hazards to adjusted survival</h2>
 <p>For each hypothetical person, convert their sequence of hazards into survival:</p>
-<pre class="{r}"><code>adjusted_survival_individual &lt;- adjusted_hazards |&gt;
-  arrange(
-    sex_scenario,
-    id,
-    age
-  ) |&gt;
-  group_by(
-    sex_scenario,
-    id
-  ) |&gt;
-  mutate(
-    survival = cumprod(1 - estimate),
-    age_end = age + 1
-  ) |&gt;
-  ungroup()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>adjusted_survival_individual <span class="ot">&lt;-</span> adjusted_hazards <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    sex_scenario,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    id,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    age</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    sex_scenario,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    id</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">survival =</span> <span class="fu">cumprod</span>(<span class="dv">1</span> <span class="sc">-</span> estimate),</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">age_end =</span> age <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>We now have one predicted survival trajectory for every individual under each sex scenario.</p>
 <p>To obtain the <strong>standardized survival curve</strong>, average these predicted survival probabilities across individuals:</p>
-<pre class="{r}"><code>adjusted_survival &lt;- adjusted_survival_individual |&gt;
-  group_by(
-    sex_scenario,
-    age_end
-  ) |&gt;
-  summarise(
-    survival = mean(survival),
-    .groups = "drop"
-  )</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>adjusted_survival <span class="ot">&lt;-</span> adjusted_survival_individual <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    sex_scenario,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    age_end</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">survival =</span> <span class="fu">mean</span>(survival),</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Plot the resulting curves:</p>
-<pre class="{r}"><code>ggplot(
-  adjusted_survival,
-  aes(
-    x = age_end,
-    y = survival,
-    linetype = sex_scenario
-  )
-) +
-  geom_line(linewidth = 1) +
-  labs(
-    x = "Age",
-    y = "Adjusted survival probability",
-    linetype = "Sex",
-    title = "SES-adjusted survival curves"
-  ) +
-  theme_minimal()</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  adjusted_survival,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> age_end,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> survival,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> sex_scenario</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age"</span>,</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Adjusted survival probability"</span>,</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"SES-adjusted survival curves"</span></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>These curves can be interpreted as:</p>
 <blockquote class="blockquote">
 <p>The predicted survival curves for men and women if both groups had the same SES distribution as the population in the data.</p>
@@ -788,17 +1257,29 @@ summary(m1)</code></pre>
 <section id="unadjusted-versus-adjusted-group-differences" class="level2">
 <h2 class="anchored" data-anchor-id="unadjusted-versus-adjusted-group-differences">Unadjusted versus adjusted group differences</h2>
 <p>We can also look at the observed Kaplan–Meier curves separately by sex:</p>
-<pre class="{r}"><code>km_sex &lt;- survfit(
-  Surv(enter, exit, event) ~ sex,
-  data = scania
-)
-
-plot(
-  km_sex,
-  xlab = "Age",
-  ylab = "Survival probability",
-  lty = 1:2
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>km_sex <span class="ot">&lt;-</span> <span class="fu">survfit</span>(</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Surv</span>(enter, exit, event) <span class="sc">~</span> sex,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  km_sex,</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Age"</span>,</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">"Survival probability"</span>,</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>These are <strong>unadjusted</strong> survival curves.</p>
 <p>They describe the actual survival experience of men and women in the data.</p>
 <p>By contrast, the regression-based curves from the previous section are adjusted for SES.</p>
@@ -816,11 +1297,25 @@ Model-based difference after adjusting for SES</code></pre>
 <h2 class="anchored" data-anchor-id="comparing-probabilities-directly-with-marginaleffects">Comparing probabilities directly with <code>marginaleffects</code></h2>
 <p>The regression model can also be used to compare predicted hazards directly.</p>
 <p>For example:</p>
-<pre class="{r}"><code>avg_comparisons(
-  m1,
-  variables = "sex",
-  type = "response"
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_comparisons</span>(</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  m1,</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="st">"sex"</span>,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"response"</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Estimate Std. Error     z Pr(&gt;|z|)   S    2.5 %  97.5 %
+  0.00161    0.00236 0.683    0.495 1.0 -0.00302 0.00624
+
+Term: sex
+Type: response
+Comparison: female - male</code></pre>
+</div>
+</div>
 <p>This converts the sex coefficient into an average difference in the predicted probability of death during an interval.</p>
 <p>For instance, an estimate of</p>
 <pre class="text"><code>0.00161</code></pre>
@@ -831,15 +1326,34 @@ Model-based difference after adjusting for SES</code></pre>
 <h2 class="anchored" data-anchor-id="differences-at-particular-ages">Differences at particular ages</h2>
 <p>Because logistic regression is nonlinear, the same coefficient can correspond to different probability differences at different ages.</p>
 <p>We can therefore estimate contrasts at specific ages:</p>
-<pre class="{r}"><code>comparisons(
-  m1,
-  variables = "sex",
-  newdata = datagrid(
-    age = c(60, 70, 79),
-    ses = unique
-  ),
-  type = "response"
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comparisons</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  m1,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="st">"sex"</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">newdata =</span> <span class="fu">datagrid</span>(</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">60</span>, <span class="dv">70</span>, <span class="dv">79</span>),</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">ses =</span> unique</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"response"</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ age   ses Estimate Std. Error     z Pr(&gt;|z|)   S    2.5 %  97.5 %
+  60 upper  0.00138    0.00203 0.676    0.499 1.0 -0.00261 0.00536
+  60 lower  0.00135    0.00198 0.680    0.497 1.0 -0.00253 0.00523
+  70 upper  0.00178    0.00264 0.675    0.500 1.0 -0.00340 0.00696
+  70 lower  0.00174    0.00257 0.678    0.498 1.0 -0.00330 0.00679
+  79 upper  0.00512    0.00757 0.676    0.499 1.0 -0.00971 0.01995
+  79 lower  0.00503    0.00741 0.679    0.497 1.0 -0.00949 0.01956
+
+Term: sex
+Type: response
+Comparison: female - male</code></pre>
+</div>
+</div>
 <p>The general principle is:</p>
 <blockquote class="blockquote">
 <p>Do not assume that a constant logit coefficient implies a constant difference in probabilities.</p>
@@ -849,36 +1363,51 @@ Model-based difference after adjusting for SES</code></pre>
 <section id="modeling-the-baseline-hazard-differently" class="level1">
 <h1>Modeling the baseline hazard differently</h1>
 <p>For the first model we used:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(age)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This is useful because it imposes essentially no functional form on the age pattern of mortality.</p>
 <p>But it requires many parameters.</p>
 <p>Once the basic logic is clear, we could use a smoother specification.</p>
 <p>For example, a quadratic:</p>
-<pre class="{r}"><code>m_quad &lt;- glm(
-  death ~ age + I(age^2) + sex + ses,
-  data = scania_pp,
-  family = binomial(link = "logit")
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>m_quad <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  death <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> sex <span class="sc">+</span> ses,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania_pp,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>Or, usually more flexibly, a spline:</p>
-<pre class="{r}"><code>m_spline &lt;- glm(
-  death ~ splines::ns(age, df = 4) + sex + ses,
-  data = scania_pp,
-  family = binomial(link = "logit")
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>m_spline <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  death <span class="sc">~</span> splines<span class="sc">::</span><span class="fu">ns</span>(age, <span class="at">df =</span> <span class="dv">4</span>) <span class="sc">+</span> sex <span class="sc">+</span> ses,</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania_pp,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>The difference is that these models impose some smoothness on the baseline hazard.</p>
 <section id="logit-versus-complementary-log-log" class="level2">
 <h2 class="anchored" data-anchor-id="logit-versus-complementary-log-log">Logit versus complementary log-log</h2>
 <p>So far we have used:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This gives a discrete-time logistic event history model.</p>
 <p>Another common specification is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"cloglog"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>family <span class="ot">=</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"cloglog"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For example:</p>
-<pre class="{r}"><code>m_cloglog &lt;- glm(
-  death ~ factor(age) + sex + ses,
-  data = scania_pp,
-  family = binomial(link = "cloglog")
-)</code></pre>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>m_cloglog <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  death <span class="sc">~</span> <span class="fu">factor</span>(age) <span class="sc">+</span> sex <span class="sc">+</span> ses,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> scania_pp,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"cloglog"</span>)</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <p>The complementary log-log model has a particularly close connection to continuous-time proportional hazards models.</p>
 <p>For short intervals and relatively uncommon events, logit and complementary log-log models often produce similar predicted hazards.</p>
 </section>
