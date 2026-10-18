@@ -1,0 +1,36 @@
+library(dplyr)
+set.seed(123)
+options(scipen = 999)
+
+N_trials <- 300000
+
+res <- data.frame(id = 1:N_trials)
+res$sum <- NA
+  
+dat <- data.frame(id = 1:199,
+                  sex = rep('X', 199))
+
+for(i in seq_len(nrow(res))){
+  
+  if(i %% 1000 == 0){
+    cat('Trial ', i, '. ', (i/N_trials)*100, '% done. \n')}
+
+  dat_new <- dat
+  dat_new$prob <- rbinom(199, 1, 0.5)
+  
+  
+  res$id[i] <- i
+  res$sum[i] <- sum(dat_new$prob)
+}
+
+
+cat('Probability of observed result: ', 
+    (sum(res$sum >= 110) / N_trials ) * 100,
+    '%, based on ', 
+    N_trials, 
+    ' trials. \n')
+
+# What would we get 
+p <- pbinom(109, size = 199, prob = 0.5, lower.tail = FALSE)
+
+cat('Analytical probability: ', p * 100, ' %')

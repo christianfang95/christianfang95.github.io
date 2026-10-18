@@ -1,0 +1,44 @@
+{
+  "research.qmd": {
+    "research.html": "0af04035"
+  },
+  "contact.qmd": {
+    "contact.html": "61b9ea9f"
+  },
+  "posts/marginally-significant/index.qmd": {
+    "index.html": "94afcc35"
+  },
+  "index.qmd": {
+    "index.html": "98035e0a"
+  },
+  "about.qmd": {
+    "about.html": "9cb1516d"
+  },
+  "cv.qmd": {
+    "cv.html": "4150b2ed"
+  },
+  "blog.qmd": {
+    "blog.html": "42459431"
+  },
+  "posts/mlpm/index.qmd": {
+    "index.html": "1223054c"
+  },
+  "posts/interactions/index.qmd": {
+    "index.html": "785ad719"
+  },
+  "posts/simulations/index.qmd": {
+    "index.html": "1ae37ebf"
+  },
+  "posts/gender-self-id/index.qmd": {
+    "index.html": "27eb49d9"
+  },
+  "posts/cancer/index.qmd": {
+    "index.html": "a0c078cf"
+  },
+  "posts/on_sex_again/index.qmd": {
+    "index.html": "c573bb32"
+  },
+  "posts/eha/index.qmd": {
+    "index.html": "8c595d9a"
+  }
+}

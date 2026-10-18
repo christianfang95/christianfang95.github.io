@@ -1,0 +1,304 @@
+library(tidyr)
+library(marginaleffects)
+library(dplyr)
+
+set.seed(20260513)
+
+# Monte Carlo condition grid without interaction effects.
+# Each row in `conditions` is one simulation scenario.
+
+n <- 5000
+mc_reps <- 100
+
+conditions <- expand.grid(
+  target_baseline_p = c(0.50, 0.70, 0.90),
+  skew = c(FALSE, TRUE),
+  z_prob = c(0.10, 0.50, 0.90),
+  outliers_x = c(FALSE, TRUE),
+  beta_x = c(0.20, 0.80, 1.50),
+  beta_z = c(0.70),
+  KEEP.OUT.ATTRS = FALSE
+)
+
+# The intercept is the log-odds corresponding to the target baseline
+# probability when x = 0 and z = 0. The realized proportion of 1s will differ
+# because x and z also affect y.
+conditions$beta_0 <- qlogis(conditions$target_baseline_p)
+conditions$condition_id <- seq_len(nrow(conditions))
+
+total_runs <- nrow(conditions) * mc_reps
+message("Conditions: ", nrow(conditions))
+message("Monte Carlo reps per condition: ", mc_reps)
+message("Total simulated datasets: ", total_runs)
+
+mc_results <- vector("list", total_runs)
+result_id <- 1
+
+for (condition_row in seq_len(nrow(conditions))) {
+  condition <- conditions[condition_row, ]
+  
+  message(
+    "Condition ", condition$condition_id, "/", nrow(conditions),
+    ": baseline_p=", condition$target_baseline_p,
+    ", skew=", condition$skew,
+    ", z_prob=", condition$z_prob,
+    ", outliers_x=", condition$outliers_x,
+    ", beta_x=", condition$beta_x,
+    ", beta_z=", condition$beta_z
+  )
+  
+  for (r in seq_len(mc_reps)) {
+    # Generate X.
+    if (condition$skew) {
+      x_raw_r <- rlnorm(n, meanlog = 0, sdlog = 0.9)
+      x_r <- as.numeric(scale(log1p(x_raw_r)))
+    } else {
+      x_r <- rnorm(n)
+    }
+    
+    # Add a small number of high-leverage X outliers.
+    if (condition$outliers_x) {
+      outlier_idx <- sample(seq_len(n), size = round(0.02 * n))
+      outlier_sign <- sample(c(-1, 1), size = length(outlier_idx), replace = TRUE)
+      x_r[outlier_idx] <- x_r[outlier_idx] + outlier_sign * 8
+    }
+    
+    # Generate Z.
+    z_r <- rbinom(n, size = 1, prob = condition$z_prob)
+    
+    # Generate Y using the logistic probability function.
+    eta_r <- condition$beta_0 + condition$beta_x * x_r + condition$beta_z * z_r
+    p_true_r <- plogis(eta_r)
+    y_r <- rbinom(n, size = 1, prob = p_true_r)
+    
+    dat_r <- data.frame(y = y_r, x = x_r, z = z_r, p_true = p_true_r)
+    
+    # True AME for continuous x:
+    # dP(Y = 1)/dx = p * (1 - p) * beta_x
+    true_x_r <- mean(p_true_r * (1 - p_true_r) * condition$beta_x)
+    
+    # True AME for binary z:
+    # average counterfactual change from z = 0 to z = 1.
+    true_z_r <- mean(
+      plogis(condition$beta_0 + condition$beta_x * x_r + condition$beta_z) -
+        plogis(condition$beta_0 + condition$beta_x * x_r)
+    )
+    
+    # Logistic regression without interactions.
+    logit_r <- glm(y ~ x + z, data = dat_r, family = binomial(link = "logit"))
+    
+    logit_x_r <- avg_slopes(
+      logit_r,
+      variables = "x",
+      type = "response",
+      vcov = FALSE
+    )$estimate[1]
+    
+    logit_z_r <- avg_comparisons(
+      logit_r,
+      variables = list(z = c(0, 1)),
+      type = "response",
+      vcov = FALSE
+    )$estimate[1]
+    
+    # Linear probability model without interactions.
+    lpm_r <- lm(y ~ x + z, data = dat_r)
+    lpm_b_r <- coef(lpm_r)
+    lpm_p_r <- predict(lpm_r)
+    
+    lpm_x_r <- lpm_b_r[["x"]]
+    lpm_z_r <- lpm_b_r[["z"]]
+    
+    mc_results[[result_id]] <- data.frame(
+      condition_id = condition$condition_id,
+      rep = r,
+      target_baseline_p = condition$target_baseline_p,
+      skew = condition$skew,
+      z_prob = condition$z_prob,
+      outliers_x = condition$outliers_x,
+      proportion_ones = mean(y_r),
+      beta_0 = condition$beta_0,
+      beta_x = condition$beta_x,
+      beta_z = condition$beta_z,
+      estimator = c("true", "logit", "LPM"),
+      ame_x = c(true_x_r, logit_x_r, lpm_x_r),
+      ame_z = c(true_z_r, logit_z_r, lpm_z_r),
+      share_lpm_predictions_below_0 = mean(lpm_p_r < 0),
+      share_lpm_predictions_above_1 = mean(lpm_p_r > 1)
+    )
+    
+    result_id <- result_id + 1
+  }
+}
+
+mc_results <- do.call(rbind, mc_results)
+
+results_long <- mc_results |>
+  pivot_longer(
+    cols = c(ame_x, ame_z),
+    names_to = "variable",
+    values_to = "estimate"
+  )
+
+results_wide <- mc_results |>
+  pivot_wider(
+    values_from = c(ame_x, ame_z),
+    names_from = estimator
+  )
+
+
+rmse_by_condition <- results_wide |>
+  mutate(
+    error_x_logit = ame_x_logit - ame_x_true,
+    error_x_LPM   = ame_x_LPM   - ame_x_true,
+    error_z_logit = ame_z_logit - ame_z_true,
+    error_z_LPM   = ame_z_LPM   - ame_z_true
+  ) |>
+  group_by(
+    condition_id,
+    target_baseline_p,
+    skew,
+    z_prob,
+    outliers_x,
+    beta_0,
+    beta_x,
+    beta_z
+  ) |>
+  summarise(
+    ame_x_LPM = mean(ame_x_LPM),
+    ame_x_logit = mean(ame_x_logit),
+    ame_x_true = mean(ame_x_true),
+    ame_z_LPM = mean(ame_z_LPM),
+    ame_z_logit = mean(ame_z_logit),
+    ame_z_true = mean(ame_z_true),   
+    rmse_x_logit = sqrt(mean(error_x_logit^2)),
+    rmse_x_LPM   = sqrt(mean(error_x_LPM^2)),
+    rmse_z_logit = sqrt(mean(error_z_logit^2)),
+    rmse_z_LPM   = sqrt(mean(error_z_LPM^2)),
+    bias_x_logit = mean(error_x_logit),
+    bias_x_LPM   = mean(error_x_LPM),
+    bias_z_logit = mean(error_z_logit),
+    bias_z_LPM   = mean(error_z_LPM),
+    .groups = "drop"
+  ) |>
+  mutate(
+    rmse_ratio_x = rmse_x_LPM / rmse_x_logit,
+    rmse_ratio_z = rmse_z_LPM / rmse_z_logit,
+    rmse_diff_x = rmse_x_LPM - rmse_x_logit,
+    rmse_diff_z = rmse_z_LPM - rmse_z_logit
+  )
+
+
+
+
+# -----------------------------
+# 2. Tidy RMSE comparison table
+# -----------------------------
+tie_margin <- 0.05
+
+rmse_rank_long <- bind_rows(
+  rmse_by_condition |>
+    transmute(
+      condition_id,
+      target_baseline_p,
+      skew,
+      z_prob,
+      outliers_x,
+      beta_0,
+      beta_x,
+      beta_z,
+      variable = "x",
+      rmse_logit = rmse_x_logit,
+      rmse_LPM = rmse_x_LPM,
+      bias_logit = bias_x_logit,
+      bias_LPM = bias_x_LPM,
+      rmse_ratio = rmse_ratio_x,
+      rmse_diff = rmse_diff_x
+    ),
+  rmse_by_condition |>
+    transmute(
+      condition_id,
+      target_baseline_p,
+      skew,
+      z_prob,
+      outliers_x,
+      beta_0,
+      beta_x,
+      beta_z,
+      variable = "z",
+      rmse_logit = rmse_z_logit,
+      rmse_LPM = rmse_z_LPM,
+      bias_logit = bias_z_logit,
+      bias_LPM = bias_z_LPM,
+      rmse_ratio = rmse_ratio_z,
+      rmse_diff = rmse_diff_z
+    )
+) |>
+  mutate(
+    winner = case_when(
+      rmse_ratio < 1 - tie_margin ~ "LPM",
+      rmse_ratio > 1 + tie_margin ~ "logit",
+      TRUE ~ "tie"
+    )
+  )
+
+overall_win_rate_total <- rmse_rank_long |>
+  count(winner) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  complete(
+    winner = c("LPM", "logit", "tie"),
+    fill = list(n = 0, percent = 0)
+  )
+
+## TOP 10 LPM
+top10_lpm <- rmse_rank_long |>
+  arrange(rmse_ratio) |>
+  group_by(variable) |>
+  slice_head(n = 10) |>
+  ungroup() |>
+  select(
+    variable,
+    condition_id,
+    rmse_ratio,
+    rmse_diff,
+    rmse_LPM,
+    rmse_logit,
+    bias_LPM,
+    bias_logit,
+    target_baseline_p,
+    skew,
+    z_prob,
+    outliers_x,
+    beta_x,
+    beta_z,
+    winner
+  ) |>
+  left_join(rmse_by_condition) |>
+  filter(winner == 'LPM')
+
+top10_lpm
+
+top10_logit <- rmse_rank_long |>
+  arrange(desc(rmse_ratio)) |>
+  group_by(variable) |>
+  slice_head(n = 10) |>
+  ungroup() |>
+  select(
+    variable,
+    condition_id,
+    rmse_ratio,
+    rmse_diff,
+    rmse_LPM,
+    rmse_logit,
+    bias_LPM,
+    bias_logit,
+    target_baseline_p,
+    skew,
+    z_prob,
+    outliers_x,
+    beta_x,
+    beta_z
+  )|>
+  left_join(rmse_by_condition)
+
+top10_logit

@@ -1,0 +1,109 @@
+library(tidyr)
+library(marginaleffects)
+library(ggplot2)
+
+set.seed(20260513)
+
+# Without interactions
+
+n <- 5000
+skewed_x <- TRUE
+run_monte_carlo <- TRUE
+mc_reps <- 1000
+
+# True coefficients in the data-generating process:
+# P(Y = 1) = logit^{-1}(beta_0 + beta_x*x + beta_z*z)
+beta_0 <- -1.5
+beta_x <- 0.8
+beta_z <- 0.7
+
+
+# -----------------------------
+# Monte Carlo
+# -----------------------------
+
+mc_results <- vector("list", mc_reps)
+mc_data_summary <- vector("list", mc_reps)
+  
+for (r in seq_len(mc_reps)) {
+  
+    # Generate X (continuous)
+    if (skewed_x) {
+      x_raw_r <- rlnorm(n, meanlog = 0, sdlog = 0.9)
+      x_r <- as.numeric(scale(log1p(x_raw_r)))
+    } else {
+      x_r <- rnorm(n)
+    }
+    
+  # Generate Z
+    z_r <- rbinom(n, size = 1, prob = 0.4)
+    
+  # Generate Y using logistic function
+    eta_r <- beta_0 + beta_x * x_r + beta_z * z_r
+    p_true_r <- plogis(eta_r)
+    y_r <- rbinom(n, size = 1, prob = p_true_r)
+    
+    # Data for regression
+    dat_r <- data.frame(y = y_r, x = x_r, z = z_r, p_true = p_true_r)
+    
+    # True AME for continuous x:
+    # dP(Y = 1)/dx = p * (1 - p) * beta_x
+    true_x_r <- mean(p_true_r * (1 - p_true_r) * beta_x)
+    
+    # True AME for binary z:
+    # average counterfactual change from z = 0 to z = 1.
+    true_z_r <- mean(
+      plogis(beta_0 + beta_x * x_r + beta_z) -
+        plogis(beta_0 + beta_x * x_r)
+    )
+    
+    # LOGISTIC REGRESSION
+    logit_r <- glm(y ~ x + z, data = dat_r, family = binomial(link = "logit"))
+    
+    logit_x_r <- avg_slopes(
+      logit_r,
+      variables = "x",
+      type = "response",
+      vcov = FALSE
+    )$estimate[1]
+    
+    logit_z_r <- avg_comparisons(
+      logit_r,
+      variables = list(z = c(0, 1)),
+      type = "response"
+    )$estimate[1]
+    
+    # LINEAR PROBABILITY MODEL 
+    lpm_r <- lm(y ~ x + z, data = dat_r)
+    
+    lpm_b_r <- coef(lpm_r)
+
+    lpm_x_r <- lpm_b_r[["x"]]
+    lpm_z_r <- lpm_b_r[["z"]]
+    
+    mc_results[[r]] <- data.frame(
+      rep = r,
+      skew = skewed_x,
+      proportion_ones = mean(y_r),
+      beta_0 = beta_0,
+      beta_x = beta_x,
+      beta_z = beta_z,
+      estimator = c("true", "logit", "LPM"),
+      ame_x = c(true_x_r, logit_x_r, lpm_x_r),
+      ame_z = c(true_z_r, logit_z_r, lpm_z_r)
+    )
+}
+
+
+mc_results <- do.call(rbind, mc_results)
+
+results_wide <- mc_results |>
+  pivot_wider(values_from = c('ame_x', 'ame_z'),
+              names_from = c('estimator'))
+
+
+
+results_wide |>
+  ggplot(aes(x=ame_x_true, y=ame_x_logit)) +
+  geom_point() +
+  geom_abline(slope = 1)

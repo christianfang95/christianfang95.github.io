@@ -1,0 +1,472 @@
+library(dplyr)
+library(tidyr)
+library(marginaleffects)
+
+setwd("~/Desktop/LPM")
+
+set.seed(20260513)
+
+# Monte Carlo pipeline with an x-by-z interaction.
+# Includes multiple DGPs:
+#   - logit: correctly specified for fitted logit
+#   - probit: nonlinear, not logit
+#   - cloglog: asymmetric nonlinear link
+#   - lpm: linear-probability DGP, favorable to LPM
+#
+# Goal:
+# Compare the raw LPM interaction coefficient to the properly calculated
+# logit interaction AME on the probability scale.
+#
+# The estimand is:
+#   AME_x(z = 1) - AME_x(z = 0)
+#
+# For the LPM, this equals the raw x:z coefficient.
+# For logit, this must be calculated on the response scale.
+
+n <- 5000
+mc_reps <- 10
+
+conditions <- expand.grid(
+  dgp = c("logit", "probit", "cloglog", "lpm"),
+  target_baseline_p = c(0.20, 0.50, 0.70, 0.90),
+  skew = c(FALSE, TRUE),
+  z_prob = c(0.10, 0.20, 0.40, 0.50, 0.90),
+  outliers_x = c(FALSE, TRUE),
+  beta_x = c(0.20, 1.50),
+  beta_z = c(0.70, 1.00),
+  beta_xz = c(-1.00, -0.50, 0),
+  KEEP.OUT.ATTRS = FALSE
+)
+
+# Baseline probability when x = 0 and z = 0.
+conditions$beta_0 <- case_when(
+  conditions$dgp == "logit" ~ qlogis(conditions$target_baseline_p),
+  conditions$dgp == "probit" ~ qnorm(conditions$target_baseline_p),
+  conditions$dgp == "cloglog" ~ log(-log(1 - conditions$target_baseline_p)),
+  conditions$dgp == "lpm" ~ conditions$target_baseline_p
+)
+
+# The logit/probit/cloglog DGPs use beta_x, beta_z, and beta_xz on an index
+# scale. For the LPM DGP, those same values would be too large as probability
+# slopes, so we use scaled probability-scale coefficients.
+conditions$beta_x_dgp <- if_else(
+  conditions$dgp == "lpm",
+  0.05 * conditions$beta_x,
+  conditions$beta_x
+)
+
+conditions$beta_z_dgp <- if_else(
+  conditions$dgp == "lpm",
+  0.10 * conditions$beta_z,
+  conditions$beta_z
+)
+
+conditions$beta_xz_dgp <- if_else(
+  conditions$dgp == "lpm",
+  0.05 * conditions$beta_xz,
+  conditions$beta_xz
+)
+
+conditions$condition_id <- seq_len(nrow(conditions))
+
+total_runs <- nrow(conditions) * mc_reps
+message("Conditions: ", nrow(conditions))
+message("Monte Carlo reps per condition: ", mc_reps)
+message("Total simulated datasets: ", total_runs)
+
+mc_results <- vector("list", total_runs)
+result_id <- 1
+
+for (condition_row in seq_len(nrow(conditions))) {
+  condition <- conditions[condition_row, ]
+  
+  message(
+    "Condition ", condition$condition_id, "/", nrow(conditions),
+    ": dgp=", condition$dgp,
+    ", baseline_p=", condition$target_baseline_p,
+    ", skew=", condition$skew,
+    ", z_prob=", condition$z_prob,
+    ", outliers_x=", condition$outliers_x,
+    ", beta_x=", condition$beta_x,
+    ", beta_z=", condition$beta_z,
+    ", beta_xz=", condition$beta_xz
+  )
+  
+  for (r in seq_len(mc_reps)) {
+    # Generate X.
+    if (condition$skew) {
+      x_raw_r <- rlnorm(n, meanlog = 0, sdlog = 0.9)
+      x_r <- as.numeric(scale(log1p(x_raw_r)))
+    } else {
+      x_r <- rnorm(n)
+    }
+    
+    # Add a small number of high-leverage X outliers.
+    if (condition$outliers_x) {
+      outlier_idx <- sample(seq_len(n), size = round(0.02 * n))
+      outlier_sign <- sample(c(-1, 1), size = length(outlier_idx), replace = TRUE)
+      x_r[outlier_idx] <- x_r[outlier_idx] + outlier_sign * 8
+    }
+    
+    # Generate Z.
+    z_r <- rbinom(n, size = 1, prob = condition$z_prob)
+    
+    # Generate Y using the selected DGP.
+    eta_r <- condition$beta_0 +
+      condition$beta_x_dgp * x_r +
+      condition$beta_z_dgp * z_r +
+      condition$beta_xz_dgp * x_r * z_r
+    
+    eta_z0_r <- condition$beta_0 + condition$beta_x_dgp * x_r
+    eta_z1_r <- condition$beta_0 +
+      condition$beta_x_dgp * x_r +
+      condition$beta_z_dgp +
+      condition$beta_xz_dgp * x_r
+    
+    if (condition$dgp == "logit") {
+      p_true_r <- plogis(eta_r)
+      p_z0_true <- plogis(eta_z0_r)
+      p_z1_true <- plogis(eta_z1_r)
+      derivative_z0 <- p_z0_true * (1 - p_z0_true)
+      derivative_z1 <- p_z1_true * (1 - p_z1_true)
+      derivative_observed <- p_true_r * (1 - p_true_r)
+    }
+    
+    if (condition$dgp == "probit") {
+      p_true_r <- pnorm(eta_r)
+      p_z0_true <- pnorm(eta_z0_r)
+      p_z1_true <- pnorm(eta_z1_r)
+      derivative_z0 <- dnorm(eta_z0_r)
+      derivative_z1 <- dnorm(eta_z1_r)
+      derivative_observed <- dnorm(eta_r)
+    }
+    
+    if (condition$dgp == "cloglog") {
+      p_true_r <- 1 - exp(-exp(eta_r))
+      p_z0_true <- 1 - exp(-exp(eta_z0_r))
+      p_z1_true <- 1 - exp(-exp(eta_z1_r))
+      derivative_z0 <- exp(eta_z0_r - exp(eta_z0_r))
+      derivative_z1 <- exp(eta_z1_r - exp(eta_z1_r))
+      derivative_observed <- exp(eta_r - exp(eta_r))
+    }
+    
+    if (condition$dgp == "lpm") {
+      p_unclipped_r <- eta_r
+      p_z0_unclipped <- eta_z0_r
+      p_z1_unclipped <- eta_z1_r
+      
+      p_true_r <- pmin(pmax(p_unclipped_r, 0.001), 0.999)
+      p_z0_true <- pmin(pmax(p_z0_unclipped, 0.001), 0.999)
+      p_z1_true <- pmin(pmax(p_z1_unclipped, 0.001), 0.999)
+      
+      derivative_z0 <- as.numeric(p_z0_unclipped > 0.001 & p_z0_unclipped < 0.999)
+      derivative_z1 <- as.numeric(p_z1_unclipped > 0.001 & p_z1_unclipped < 0.999)
+      derivative_observed <- as.numeric(p_unclipped_r > 0.001 & p_unclipped_r < 0.999)
+    }
+    
+    y_r <- rbinom(n, size = 1, prob = p_true_r)
+    
+    dat_r <- data.frame(y = y_r, x = x_r, z = z_r, p_true = p_true_r)
+    
+    # -----------------------------
+    # True interaction AME
+    # -----------------------------
+    #
+    # AME_x(z = 0) = mean[p0 * (1 - p0) * beta_x]
+    # AME_x(z = 1) = mean[p1 * (1 - p1) * (beta_x + beta_xz)]
+    #
+    # The interaction AME is their difference.
+    
+    true_x_z0_r <- mean(derivative_z0 * condition$beta_x_dgp)
+    true_x_z1_r <- mean(
+      derivative_z1 * (condition$beta_x_dgp + condition$beta_xz_dgp)
+    )
+    true_interaction_r <- true_x_z1_r - true_x_z0_r
+    
+    # Overall true AME for x, averaged over the observed z distribution.
+    true_x_r <- mean(
+      derivative_observed * (condition$beta_x_dgp + condition$beta_xz_dgp * z_r)
+    )
+    
+    # Overall true AME for binary z, calculated as a discrete change.
+    true_z_r <- mean(p_z1_true - p_z0_true)
+    
+    # -----------------------------
+    # Logistic regression
+    # -----------------------------
+    
+    logit_r <- glm(y ~ x * z, data = dat_r, family = binomial(link = "logit"))
+    logit_b_r <- coef(logit_r)
+    
+    logit_x_by_z_r <- avg_slopes(
+      logit_r,
+      variables = "x",
+      newdata = datagrid(z = 0:1, grid_type = "counterfactual"),
+      by = "z",
+      type = "response",
+      vcov = FALSE
+    )
+    
+    logit_x_z0_r <- logit_x_by_z_r$estimate[logit_x_by_z_r$z == 0]
+    logit_x_z1_r <- logit_x_by_z_r$estimate[logit_x_by_z_r$z == 1]
+    logit_interaction_r <- logit_x_z1_r - logit_x_z0_r
+    
+    # Overall logit AMEs for x and z.
+    logit_x_r <- avg_slopes(
+      logit_r,
+      variables = "x",
+      type = "response",
+      vcov = FALSE
+    )$estimate[1]
+    
+    logit_z_r <- avg_comparisons(
+      logit_r,
+      variables = list(z = c(0, 1)),
+      type = "response",
+      vcov = FALSE
+    )$estimate[1]
+    
+    # -----------------------------
+    # Linear probability model
+    # -----------------------------
+    
+    lpm_r <- lm(y ~ x * z, data = dat_r)
+    lpm_b_r <- coef(lpm_r)
+    lpm_p_r <- predict(lpm_r)
+    
+    lpm_x_z0_r <- lpm_b_r[["x"]]
+    lpm_x_z1_r <- lpm_b_r[["x"]] + lpm_b_r[["x:z"]]
+    lpm_interaction_r <- lpm_b_r[["x:z"]]
+    lpm_x_raw_r <- lpm_b_r[["x"]]
+    lpm_z_raw_r <- lpm_b_r[["z"]]
+    
+    # Average LPM slope/change. These are the fair probability-scale analogues
+    # to AMEs when an interaction is in the model.
+    lpm_x_avg_r <- lpm_b_r[["x"]] + lpm_b_r[["x:z"]] * mean(z_r)
+    lpm_z_avg_r <- lpm_b_r[["z"]] + lpm_b_r[["x:z"]] * mean(x_r)
+    
+    mc_results[[result_id]] <- data.frame(
+      condition_id = condition$condition_id,
+      rep = r,
+      dgp = condition$dgp,
+      target_baseline_p = condition$target_baseline_p,
+      skew = condition$skew,
+      z_prob = condition$z_prob,
+      outliers_x = condition$outliers_x,
+      proportion_ones = mean(y_r),
+      beta_0 = condition$beta_0,
+      beta_x = condition$beta_x,
+      beta_z = condition$beta_z,
+      beta_xz = condition$beta_xz,
+      beta_x_dgp = condition$beta_x_dgp,
+      beta_z_dgp = condition$beta_z_dgp,
+      beta_xz_dgp = condition$beta_xz_dgp,
+      estimator = c("true", "logit", "LPM"),
+      interaction_effect = c(
+        true_interaction_r,
+        logit_interaction_r,
+        lpm_interaction_r
+      ),
+      ame_x = c(true_x_r, logit_x_r, lpm_x_raw_r),
+      ame_z = c(true_z_r, logit_z_r, lpm_z_raw_r),
+      x_slope_z0 = c(true_x_z0_r, logit_x_z0_r, lpm_x_z0_r),
+      x_slope_z1 = c(true_x_z1_r, logit_x_z1_r, lpm_x_z1_r),
+      lpm_avg_x_slope = lpm_x_avg_r,
+      lpm_avg_z_change = lpm_z_avg_r,
+      raw_logit_x_coef = logit_b_r[["x"]],
+      raw_logit_z_coef = logit_b_r[["z"]],
+      raw_logit_xz_coef = logit_b_r[["x:z"]],
+      raw_lpm_x_coef = lpm_b_r[["x"]],
+      raw_lpm_z_coef = lpm_b_r[["z"]],
+      raw_lpm_xz_coef = lpm_b_r[["x:z"]],
+      share_lpm_predictions_below_0 = mean(lpm_p_r < 0),
+      share_lpm_predictions_above_1 = mean(lpm_p_r > 1)
+    )
+    
+    result_id <- result_id + 1
+  }
+}
+
+mc_results <- do.call(rbind, mc_results)
+
+results_wide <- mc_results |>
+  pivot_wider(
+    values_from = c(interaction_effect, ame_x, ame_z, x_slope_z0, x_slope_z1),
+    names_from = estimator
+  )
+
+results_wide <- results_wide |>
+  mutate(
+    error_interaction_logit = interaction_effect_logit - interaction_effect_true,
+    error_interaction_LPM = interaction_effect_LPM - interaction_effect_true,
+    error_ame_x_logit = ame_x_logit - ame_x_true,
+    error_ame_x_LPM = ame_x_LPM - ame_x_true,
+    error_ame_z_logit = ame_z_logit - ame_z_true,
+    error_ame_z_LPM = ame_z_LPM - ame_z_true,
+    error_x_z0_logit = x_slope_z0_logit - x_slope_z0_true,
+    error_x_z0_LPM = x_slope_z0_LPM - x_slope_z0_true,
+    error_x_z1_logit = x_slope_z1_logit - x_slope_z1_true,
+    error_x_z1_LPM = x_slope_z1_LPM - x_slope_z1_true
+  )
+
+rmse_by_condition <- results_wide |>
+  group_by(
+    condition_id,
+    dgp,
+    target_baseline_p,
+    skew,
+    z_prob,
+    outliers_x,
+    beta_0,
+    beta_x,
+    beta_z,
+    beta_xz,
+    beta_x_dgp,
+    beta_z_dgp,
+    beta_xz_dgp
+  ) |>
+  summarise(
+    rmse_interaction_logit = sqrt(mean(error_interaction_logit^2)),
+    rmse_interaction_LPM = sqrt(mean(error_interaction_LPM^2)),
+    bias_interaction_logit = mean(error_interaction_logit),
+    bias_interaction_LPM = mean(error_interaction_LPM),
+    rmse_ame_x_logit = sqrt(mean(error_ame_x_logit^2)),
+    rmse_ame_x_LPM = sqrt(mean(error_ame_x_LPM^2)),
+    rmse_ame_z_logit = sqrt(mean(error_ame_z_logit^2)),
+    rmse_ame_z_LPM = sqrt(mean(error_ame_z_LPM^2)),
+    bias_ame_x_logit = mean(error_ame_x_logit),
+    bias_ame_x_LPM = mean(error_ame_x_LPM),
+    bias_ame_z_logit = mean(error_ame_z_logit),
+    bias_ame_z_LPM = mean(error_ame_z_LPM),
+    rmse_x_z0_logit = sqrt(mean(error_x_z0_logit^2)),
+    rmse_x_z0_LPM = sqrt(mean(error_x_z0_LPM^2)),
+    rmse_x_z1_logit = sqrt(mean(error_x_z1_logit^2)),
+    rmse_x_z1_LPM = sqrt(mean(error_x_z1_LPM^2)),
+    mean_true_interaction = mean(interaction_effect_true),
+    mean_logit_interaction = mean(interaction_effect_logit),
+    mean_lpm_interaction = mean(interaction_effect_LPM),
+    mean_true_ame_x = mean(ame_x_true),
+    mean_logit_ame_x = mean(ame_x_logit),
+    mean_lpm_x_coef = mean(ame_x_LPM),
+    mean_true_ame_z = mean(ame_z_true),
+    mean_logit_ame_z = mean(ame_z_logit),
+    mean_lpm_z_coef = mean(ame_z_LPM),
+    mean_lpm_avg_x_slope = mean(lpm_avg_x_slope),
+    mean_lpm_avg_z_change = mean(lpm_avg_z_change),
+    mean_true_x_z0 = mean(x_slope_z0_true),
+    mean_logit_x_z0 = mean(x_slope_z0_logit),
+    mean_lpm_x_z0 = mean(x_slope_z0_LPM),
+    mean_true_x_z1 = mean(x_slope_z1_true),
+    mean_logit_x_z1 = mean(x_slope_z1_logit),
+    mean_lpm_x_z1 = mean(x_slope_z1_LPM),
+    .groups = "drop"
+  ) |>
+  mutate(
+    rmse_ratio_interaction = rmse_interaction_LPM / rmse_interaction_logit,
+    rmse_diff_interaction = rmse_interaction_LPM - rmse_interaction_logit
+  )
+
+tie_margin <- 0.05
+
+report_table <- rmse_by_condition |>
+  mutate(
+    winner = case_when(
+      rmse_ratio_interaction < 1 - tie_margin ~ "LPM",
+      rmse_ratio_interaction > 1 + tie_margin ~ "logit",
+      TRUE ~ "tie"
+    )
+  )
+
+overall_win_rate <- report_table |>
+  count(winner) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  complete(
+    winner = c("LPM", "logit", "tie"),
+    fill = list(n = 0, percent = 0)
+  )
+
+overall_win_rate_by_dgp <- report_table |>
+  count(dgp, winner) |>
+  group_by(dgp) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  ungroup() |>
+  complete(
+    dgp,
+    winner = c("LPM", "logit", "tie"),
+    fill = list(n = 0, percent = 0)
+  )
+
+top10_lpm <- report_table |>
+  filter(winner == "LPM") |>
+  arrange(rmse_ratio_interaction) |>
+  slice_head(n = 10) |>
+  select(condition_id, 
+         dgp,
+         target_baseline_p,
+         skew,
+         z_prob,
+         outliers_x,
+         beta_x,
+         beta_z,
+         beta_xz,
+         beta_x_dgp,
+         beta_z_dgp,
+         beta_xz_dgp,
+         rmse_interaction_logit,
+         rmse_interaction_LPM,
+         mean_lpm_interaction,
+         mean_logit_interaction,
+         mean_true_interaction, 
+         mean_true_ame_x,
+         mean_lpm_x_coef,
+         mean_logit_ame_x,
+         mean_true_ame_z,
+         mean_lpm_z_coef,
+         mean_logit_ame_z)
+
+top10_logit <- report_table |>
+  filter(winner == "logit") |>
+  arrange(desc(rmse_ratio_interaction)) |>
+  slice_head(n = 10) |>
+  select(condition_id, 
+         dgp,
+         target_baseline_p,
+         skew,
+         z_prob,
+         outliers_x,
+         beta_x,
+         beta_z,
+         beta_xz,
+         beta_x_dgp,
+         beta_z_dgp,
+         beta_xz_dgp,
+         rmse_interaction_logit,
+         rmse_interaction_LPM,
+         mean_lpm_interaction,
+         mean_logit_interaction,
+         mean_true_interaction, 
+         mean_true_ame_x,
+         mean_lpm_x_coef,
+         mean_logit_ame_x,
+         mean_true_ame_z,
+         mean_lpm_z_coef,
+         mean_logit_ame_z)
+
+write.csv(mc_results, "interaction_mc_results_long.csv", row.names = FALSE)
+write.csv(results_wide, "interaction_mc_results_wide.csv", row.names = FALSE)
+write.csv(report_table, "interaction_report_table.csv", row.names = FALSE)
+write.csv(overall_win_rate_by_dgp, "interaction_win_rate_by_dgp.csv", row.names = FALSE)
+write.csv(top10_lpm, "interaction_top10_lpm.csv", row.names = FALSE)
+write.csv(top10_logit, "interaction_top10_logit.csv", row.names = FALSE)
+
+cat("\nOverall win rate for interaction effect, 5% tie margin\n")
+print(overall_win_rate)
+
+cat("\nOverall win rate by DGP for interaction effect, 5% tie margin\n")
+print(overall_win_rate_by_dgp)
+
+cat("\nTop LPM-favorable conditions\n")
+print(top10_lpm)
+
+cat("\nTop logit-favorable conditions\n")
+print(top10_logit)
